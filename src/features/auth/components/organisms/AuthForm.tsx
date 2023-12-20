@@ -10,6 +10,8 @@ import { ActionType, InputType } from "../../utils/types";
 import { reducerHandler, registerHandler } from "../../utils/handlers";
 import { RegisterFormFields } from "../molecules/RegisterFormFields";
 import { CommonFormFields } from "../molecules/CommonFormFields";
+import { AuthDialog } from "../atoms/AuthDialog";
+import { COLORS } from "../../../../shared/utils/const-colors";
 
 export const INITIAL_INPUTS_VALUES: InputType = {
   email: "",
@@ -19,32 +21,45 @@ export const INITIAL_INPUTS_VALUES: InputType = {
 };
 
 export const AuthForm = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
+  const [wrongCredentials, setWrongCredentials] = useState({
+    bool: false,
+    cause: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [inputValues, dispatch] = useReducer<Reducer<InputType, ActionType>>(
     reducerHandler,
     INITIAL_INPUTS_VALUES
   );
 
+  const handleRegisterClick = () => {
+    setIsSubmitting(true);
+    const response = registerHandler(inputValues);
+    if (response.status === "error") {
+      setWrongCredentials({ bool: true, cause: response.cause });
+      setIsSubmitting(false);
+      return;
+    }
+  };
+
   return (
     <View style={styles.form}>
       <Text variant="titleLarge">{capitalizeStr(mode)}</Text>
-      <View>
-        <CommonFormFields
-          emailValue={inputValues.email}
-          passwordValue={inputValues.password}
+      <CommonFormFields dispatch={dispatch} />
+      {mode === AUTH_MODE_ENUM.REGISTER && (
+        <RegisterFormFields
+          privacyPolicyValue={inputValues.privacyPolicy}
           dispatch={dispatch}
         />
-        {mode === AUTH_MODE_ENUM.REGISTER && (
-          <RegisterFormFields
-            repeatPasswordValue={inputValues.repeatPassword}
-            privacyPolicyValue={inputValues.privacyPolicy}
-            dispatch={dispatch}
-          />
-        )}
-      </View>
-      <VariantButton onPress={() => registerHandler(inputValues)}>
+      )}
+      <VariantButton onPress={handleRegisterClick} loading={isSubmitting}>
         {capitalizeStr(mode)}
       </VariantButton>
       <LabelChangeAuthMode mode={mode} />
+      <AuthDialog
+        visible={wrongCredentials.bool}
+        onDismiss={() => setWrongCredentials({ bool: false, cause: "" })}
+        heading={wrongCredentials.cause}
+      />
     </View>
   );
 };
@@ -53,5 +68,11 @@ const styles = StyleSheet.create({
   form: {
     justifyContent: "center",
     alignItems: "center",
+  },
+  modal: {
+    width: "80%",
+    height: "80%",
+    alignSelf: "center",
+    backgroundColor: COLORS.palette.orange + "dd",
   },
 });

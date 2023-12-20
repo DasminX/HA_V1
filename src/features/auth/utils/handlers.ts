@@ -1,37 +1,45 @@
-import { Reducer } from "react";
 import { INPUT_VALUES_ENUM } from "./enums";
-import { ActionType, InputType } from "./types";
+import { generateInputValuesError } from "./error";
+import { ActionType, InputType, RegisterHandlerType } from "./types";
 import {
   arePasswordsSame,
-  validateEmailPassword,
-  validateInputValues,
+  validateEmail,
+  validatePassword,
 } from "./validators";
 
-// TODO
 export const reducerHandler = (state: InputType, action: ActionType) => {
-  const defaultState = { ...state };
   switch (action.type) {
     case INPUT_VALUES_ENUM.EMAIL:
-      if (!action.payload) return defaultState;
+      if (!action.payload) return { ...state };
       return { ...state, email: action.payload };
     case INPUT_VALUES_ENUM.PASSWORD:
-      if (!action.payload) return defaultState;
+      if (!action.payload) return { ...state };
       return { ...state, password: action.payload };
     case INPUT_VALUES_ENUM.REPEAT_PASSWORD:
-      if (!action.payload) return defaultState;
+      if (!action.payload) return { ...state };
       return { ...state, repeatPassword: action.payload };
     case INPUT_VALUES_ENUM.PRIVACY_POLICY:
       return { ...state, privacyPolicy: !state.privacyPolicy };
     default:
-      return defaultState;
+      return { ...state };
   }
 };
 
-export const registerHandler = (inputValues: InputType) => {
-  if (!validateInputValues(inputValues)) return;
+export const registerHandler: RegisterHandlerType = (inputValues) => {
+  if (!validateEmail(inputValues.email)) {
+    return generateInputValuesError("EMAIL");
+  }
+  if (!validatePassword(inputValues.password)) {
+    return generateInputValuesError("PASSWORD");
+  }
+  if (!arePasswordsSame(inputValues.password, inputValues.repeatPassword)) {
+    return generateInputValuesError("REPEAT_PASSWORD");
+  }
+  if (!inputValues.privacyPolicy) {
+    return generateInputValuesError("PRIVACY_POLICY");
+  }
 
-  console.log("przeszlo");
-
+  return { status: "validated" };
   try {
   } catch (error) {}
 };

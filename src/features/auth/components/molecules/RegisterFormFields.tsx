@@ -6,13 +6,11 @@ import { INPUT_VALUES_ENUM } from "../../utils/enums";
 import { Dispatch } from "react";
 
 type RegisterFormFieldsProps = {
-  repeatPasswordValue: InputType["repeatPassword"];
   privacyPolicyValue: InputType["privacyPolicy"];
   dispatch: Dispatch<ActionType>;
 };
 
 export const RegisterFormFields = ({
-  repeatPasswordValue,
   privacyPolicyValue,
   dispatch,
 }: RegisterFormFieldsProps) => {
@@ -21,7 +19,6 @@ export const RegisterFormFields = ({
       <OutlinedInput
         secureTextEntry={true}
         label={"Repeat password"}
-        value={repeatPasswordValue}
         onChangeText={(text) =>
           dispatch({ type: INPUT_VALUES_ENUM.REPEAT_PASSWORD, payload: text })
         }

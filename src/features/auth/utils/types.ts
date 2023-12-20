@@ -13,3 +13,16 @@ export type InputType = {
 };
 
 export type AuthPathType = Lowercase<keyof typeof AUTH_MODE_ENUM>;
+
+export type ErrorRegisterHandlerResponse = {
+  readonly status: "error";
+  readonly cause: keyof typeof INPUT_VALUES_ENUM;
+};
+
+export type SuccessRegisterHandlerResponse = {
+  readonly status: "validated";
+};
+
+export type RegisterHandlerType = (
+  inputValues: InputType
+) => ErrorRegisterHandlerResponse | SuccessRegisterHandlerResponse;

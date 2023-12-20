@@ -7,21 +7,15 @@ interface VariantButtonProps extends ButtonProps {
 }
 
 // TODO textColor do wywalenia?
-export default function VariantButton({
-  children,
-  onPress,
-  variant = "blue",
-  textColor = "white",
-}: VariantButtonProps) {
+export default function VariantButton(props: VariantButtonProps) {
   return (
     <Button
-      onPress={onPress}
-      buttonColor={COLORS.variants[variant]}
-      textColor={textColor}
+      buttonColor={COLORS.variants[props.variant ?? "blue"]}
       uppercase
       style={styles.button}
+      {...props}
     >
-      {children}
+      {props.children}
     </Button>
   );
 }
