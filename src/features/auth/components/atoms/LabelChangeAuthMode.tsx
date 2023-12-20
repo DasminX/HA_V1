@@ -4,28 +4,28 @@ import { capitalizeStr } from "../../../../shared/utils/helpers";
 import { COLORS } from "../../../../shared/utils/const-colors";
 import { AUTH_MODE_ENUM } from "../../utils/enums";
 import { AuthPathType } from "../../utils/types";
-
-const LABEL_TEXT = {
-  register: "Haven't got an account yet?",
-  login: "Do you already have an account?",
-};
+import { useTranslation } from "react-i18next";
 
 export const LabelChangeAuthMode = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
+  const { t } = useTranslation();
   const oppositePath = (
     mode === AUTH_MODE_ENUM.REGISTER
       ? AUTH_MODE_ENUM.LOGIN.toLowerCase()
       : AUTH_MODE_ENUM.REGISTER.toLowerCase()
   ) as AuthPathType;
 
+  const translatedText =
+    oppositePath === "login" ? "havingAccount" : "notHavingAccount";
+
   return (
     <Text variant="labelLarge">
-      {LABEL_TEXT[oppositePath]}{" "}
+      {t(`auth.${translatedText}`)}{" "}
       <Text variant="bodyLarge">
         <Link
           style={{ color: COLORS.variants.blue }}
           href={`/(auth)/${oppositePath}`}
         >
-          {capitalizeStr(oppositePath)}
+          {capitalizeStr(t(`auth.${oppositePath}`))}
         </Link>
       </Text>
     </Text>

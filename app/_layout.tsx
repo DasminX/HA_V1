@@ -12,6 +12,7 @@ import { useColorScheme } from "react-native";
 import { Stack } from "expo-router";
 import { PaperProvider } from "react-native-paper";
 import { StatusBar } from "expo-status-bar";
+import { initializeI18N } from "../src/dict/initializer";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -48,6 +49,7 @@ export default function RootLayout() {
     return null;
   }
 
+  initializeI18N();
   return (
     <PaperProvider>
       <StatusBar style="light" />

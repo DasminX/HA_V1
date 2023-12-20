@@ -21,15 +21,15 @@ export const INITIAL_INPUTS_VALUES: InputType = {
 };
 
 export const AuthForm = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
+  const [inputValues, dispatch] = useReducer<Reducer<InputType, ActionType>>(
+    reducerHandler,
+    INITIAL_INPUTS_VALUES
+  );
   const [wrongCredentials, setWrongCredentials] = useState({
     bool: false,
     cause: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [inputValues, dispatch] = useReducer<Reducer<InputType, ActionType>>(
-    reducerHandler,
-    INITIAL_INPUTS_VALUES
-  );
 
   const handleRegisterClick = () => {
     setIsSubmitting(true);
