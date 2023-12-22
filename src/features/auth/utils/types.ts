@@ -24,10 +24,20 @@ export type SuccessRegisterHandlerResponse = {
 };
 
 export type RegisterHandlerType = (
+  mode: keyof typeof AUTH_MODE_ENUM,
   inputValues: InputType
-) => ErrorRegisterHandlerResponse | SuccessRegisterHandlerResponse;
+) => Promise<Response>;
 
 export type CredentialsType = {
   readonly bool: boolean;
   readonly cause: string;
 };
+
+export type HttpMethod =
+  | "GET"
+  | "POST"
+  | "PUT"
+  | "DELETE"
+  | "PATCH"
+  | "OPTIONS"
+  | "HEAD";

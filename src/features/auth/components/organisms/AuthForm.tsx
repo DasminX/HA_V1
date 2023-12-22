@@ -1,12 +1,11 @@
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
-
 import VariantButton from "../../../../shared/components/button/VariantButton";
 import { capitalizeStr } from "../../../../shared/utils/helpers";
 import { LabelChangeAuthMode } from "../atoms/LabelChangeAuthMode";
 import { AUTH_MODE_ENUM, INPUT_VALUES_ENUM } from "../../utils/enums";
 import { CredentialsType, InputType } from "../../utils/types";
-import { registerHandler } from "../../utils/handlers";
+import { authorize } from "../../utils/handlers";
 import { RegisterFormFields } from "../molecules/RegisterFormFields";
 import { CommonFormFields } from "../molecules/CommonFormFields";
 import { AuthDialog } from "../atoms/AuthDialog";
@@ -36,14 +35,13 @@ export const AuthForm = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
     setIsSubmitting(true);
     const validationResult =
       AuthValidatorFactory.initialize(mode).validateInputs(inputValues);
-    console.log(validationResult);
 
     if (validationResult.status === "error") {
       setIsWrongCredentials({ bool: true, cause: validationResult.cause });
       setIsSubmitting(false);
       return;
     }
-    // const response = registerHandler(inputValues);
+    const response = authorize(mode, inputValues);
   };
 
   return (
