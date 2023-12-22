@@ -10,6 +10,7 @@ type CommonFormFieldsProps = {
 
 export const CommonFormFields = ({ dispatch }: CommonFormFieldsProps) => {
   const { t } = useTranslation();
+
   return (
     <>
       <OutlinedInput

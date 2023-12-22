@@ -1,4 +1,3 @@
-import { Reducer, useReducer, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 
@@ -6,59 +5,65 @@ import VariantButton from "../../../../shared/components/button/VariantButton";
 import { capitalizeStr } from "../../../../shared/utils/helpers";
 import { LabelChangeAuthMode } from "../atoms/LabelChangeAuthMode";
 import { AUTH_MODE_ENUM, INPUT_VALUES_ENUM } from "../../utils/enums";
-import { ActionType, InputType } from "../../utils/types";
-import { reducerHandler, registerHandler } from "../../utils/handlers";
+import { CredentialsType, InputType } from "../../utils/types";
+import { registerHandler } from "../../utils/handlers";
 import { RegisterFormFields } from "../molecules/RegisterFormFields";
 import { CommonFormFields } from "../molecules/CommonFormFields";
 import { AuthDialog } from "../atoms/AuthDialog";
 import { COLORS } from "../../../../shared/utils/const-colors";
+import { useAuthForm } from "../../hooks/useAuthForm";
+import { AuthValidatorFactory } from "../../utils/validators";
 
-export const INITIAL_INPUTS_VALUES: InputType = {
+export const DEFAULT_INPUTS_VALUES: InputType = Object.freeze({
   email: "",
   password: "",
   repeatPassword: "",
   privacyPolicy: false,
-};
+});
+export const DEFAULT_CREDENTIALS: CredentialsType = { bool: false, cause: "" };
 
 export const AuthForm = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
-  const [inputValues, dispatch] = useReducer<Reducer<InputType, ActionType>>(
-    reducerHandler,
-    INITIAL_INPUTS_VALUES
-  );
-  const [wrongCredentials, setWrongCredentials] = useState({
-    bool: false,
-    cause: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const {
+    inputValues,
+    dispatchInputValues,
+    isWrongCredentials,
+    setIsWrongCredentials,
+    isSubmitting,
+    setIsSubmitting,
+  } = useAuthForm(DEFAULT_INPUTS_VALUES, DEFAULT_CREDENTIALS);
 
-  const handleRegisterClick = () => {
+  const handleAuthClick = () => {
     setIsSubmitting(true);
-    const response = registerHandler(inputValues);
-    if (response.status === "error") {
-      setWrongCredentials({ bool: true, cause: response.cause });
+    const validationResult =
+      AuthValidatorFactory.initialize(mode).validateInputs(inputValues);
+    console.log(validationResult);
+
+    if (validationResult.status === "error") {
+      setIsWrongCredentials({ bool: true, cause: validationResult.cause });
       setIsSubmitting(false);
       return;
     }
+    // const response = registerHandler(inputValues);
   };
 
   return (
     <View style={styles.form}>
       <Text variant="titleLarge">{capitalizeStr(mode)}</Text>
-      <CommonFormFields dispatch={dispatch} />
+      <CommonFormFields dispatch={dispatchInputValues} />
       {mode === AUTH_MODE_ENUM.REGISTER && (
         <RegisterFormFields
           privacyPolicyValue={inputValues.privacyPolicy}
-          dispatch={dispatch}
+          dispatch={dispatchInputValues}
         />
       )}
-      <VariantButton onPress={handleRegisterClick} loading={isSubmitting}>
+      <VariantButton onPress={handleAuthClick} loading={isSubmitting}>
         {capitalizeStr(mode)}
       </VariantButton>
       <LabelChangeAuthMode mode={mode} />
       <AuthDialog
-        visible={wrongCredentials.bool}
-        onDismiss={() => setWrongCredentials({ bool: false, cause: "" })}
-        heading={wrongCredentials.cause}
+        visible={isWrongCredentials.bool}
+        onDismiss={() => setIsWrongCredentials({ bool: false, cause: "" })}
+        cause={isWrongCredentials.cause}
       />
     </View>
   );

@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 
 export const LabelChangeAuthMode = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
   const { t } = useTranslation();
+
   const oppositePath = (
     mode === AUTH_MODE_ENUM.REGISTER
       ? AUTH_MODE_ENUM.LOGIN.toLowerCase()

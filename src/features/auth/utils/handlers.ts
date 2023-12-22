@@ -1,11 +1,5 @@
 import { INPUT_VALUES_ENUM } from "./enums";
-import { generateInputValuesError } from "./error";
 import { ActionType, InputType, RegisterHandlerType } from "./types";
-import {
-  arePasswordsSame,
-  validateEmail,
-  validatePassword,
-} from "./validators";
 
 export const reducerHandler = (state: InputType, action: ActionType) => {
   switch (action.type) {
@@ -26,18 +20,8 @@ export const reducerHandler = (state: InputType, action: ActionType) => {
 };
 
 export const registerHandler: RegisterHandlerType = (inputValues) => {
-  if (!validateEmail(inputValues.email)) {
-    return generateInputValuesError("EMAIL");
-  }
-  if (!validatePassword(inputValues.password)) {
-    return generateInputValuesError("PASSWORD");
-  }
-  if (!arePasswordsSame(inputValues.password, inputValues.repeatPassword)) {
-    return generateInputValuesError("REPEAT_PASSWORD");
-  }
-  if (!inputValues.privacyPolicy) {
-    return generateInputValuesError("PRIVACY_POLICY");
-  }
+  // const validationResult = validateInputs(inputValues);
+  // if (validationResult.status === "error") return validationResult;
 
   return { status: "validated" };
   try {

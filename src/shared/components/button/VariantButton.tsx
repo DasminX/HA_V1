@@ -6,7 +6,6 @@ interface VariantButtonProps extends ButtonProps {
   variant?: keyof typeof COLORS.variants;
 }
 
-// TODO textColor do wywalenia?
 export default function VariantButton(props: VariantButtonProps) {
   return (
     <Button

@@ -16,6 +16,7 @@ export const RegisterFormFields = ({
   dispatch,
 }: RegisterFormFieldsProps) => {
   const { t } = useTranslation();
+
   return (
     <>
       <OutlinedInput

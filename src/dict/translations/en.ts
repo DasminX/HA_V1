@@ -12,5 +12,9 @@ export default {
     havingAccount: "Do you already have an account?",
     login: "Log in",
     register: "Register",
+    emailInvalid: "Email is not valid",
+    passwordInvalid: "Password is not valid",
+    repeatPasswordInvalid: "Passwords are not the same",
+    privacyPolicyInvalid: "Privacy policy is not accepted",
   },
 };

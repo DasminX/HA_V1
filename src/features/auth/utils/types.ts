@@ -26,3 +26,8 @@ export type SuccessRegisterHandlerResponse = {
 export type RegisterHandlerType = (
   inputValues: InputType
 ) => ErrorRegisterHandlerResponse | SuccessRegisterHandlerResponse;
+
+export type CredentialsType = {
+  readonly bool: boolean;
+  readonly cause: string;
+};
