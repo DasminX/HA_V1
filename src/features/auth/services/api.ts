@@ -3,17 +3,17 @@ import { HttpMethod } from "../utils/types";
 
 const API_AUTH_PATH = "http://localhost:3001/api/auth/";
 
-export class API_AUTH {
-  private static _instance: API_AUTH;
+export class ApiAuth {
+  private static _instance: ApiAuth;
 
   private constructor(private _path: keyof typeof AUTH_MODE_ENUM) {}
 
-  public static getInstance(_path: keyof typeof AUTH_MODE_ENUM): API_AUTH {
-    if (!API_AUTH._instance?._path) {
-      API_AUTH._instance = new API_AUTH(_path);
+  public static getInstance(_path: keyof typeof AUTH_MODE_ENUM): ApiAuth {
+    if (!ApiAuth._instance?._path) {
+      ApiAuth._instance = new ApiAuth(_path);
     }
 
-    return API_AUTH._instance;
+    return ApiAuth._instance;
   }
 
   public async call(

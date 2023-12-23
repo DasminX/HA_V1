@@ -10,6 +10,7 @@ export default function VariantButton(props: VariantButtonProps) {
   return (
     <Button
       buttonColor={COLORS.variants[props.variant ?? "blue"]}
+      textColor="white"
       uppercase
       style={styles.button}
       {...props}

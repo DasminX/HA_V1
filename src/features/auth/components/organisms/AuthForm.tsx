@@ -12,6 +12,7 @@ import { AuthDialog } from "../atoms/AuthDialog";
 import { COLORS } from "../../../../shared/utils/const-colors";
 import { useAuthForm } from "../../hooks/useAuthForm";
 import { AuthValidatorFactory } from "../../utils/validators";
+import { useTranslation } from "react-i18next";
 
 export const DEFAULT_INPUTS_VALUES: InputType = Object.freeze({
   email: "",
@@ -22,6 +23,7 @@ export const DEFAULT_INPUTS_VALUES: InputType = Object.freeze({
 export const DEFAULT_CREDENTIALS: CredentialsType = { bool: false, cause: "" };
 
 export const AuthForm = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
+  const { t } = useTranslation();
   const {
     inputValues,
     dispatchInputValues,
@@ -46,7 +48,7 @@ export const AuthForm = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
 
   return (
     <View style={styles.form}>
-      <Text variant="titleLarge">{capitalizeStr(mode)}</Text>
+      <Text variant="titleLarge">{t(`auth.${mode.toLowerCase()}`)}</Text>
       <CommonFormFields dispatch={dispatchInputValues} />
       {mode === AUTH_MODE_ENUM.REGISTER && (
         <RegisterFormFields
@@ -55,7 +57,7 @@ export const AuthForm = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
         />
       )}
       <VariantButton onPress={handleAuthClick} loading={isSubmitting}>
-        {capitalizeStr(mode)}
+        {t(`auth.${mode.toLowerCase()}`)}
       </VariantButton>
       <LabelChangeAuthMode mode={mode} />
       <AuthDialog

@@ -1,4 +1,4 @@
-import { API_AUTH } from "../services/api";
+import { ApiAuth } from "../services/api";
 import { INPUT_VALUES_ENUM } from "./enums";
 import { ActionType, InputType, RegisterHandlerType } from "./types";
 
@@ -21,7 +21,7 @@ export const reducerHandler = (state: InputType, action: ActionType) => {
 };
 
 export const authorize: RegisterHandlerType = async (mode, inputValues) => {
-  const api = API_AUTH.getInstance(mode);
+  const api = ApiAuth.getInstance(mode);
   const response = await api.call(mode, { method: "POST", data: inputValues });
   return response;
 };
