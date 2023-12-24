@@ -3,6 +3,7 @@ import { useFonts } from "expo-font";
 import { SplashScreen } from "expo-router";
 import { useEffect } from "react";
 import { Provider as StoreProvider } from "react-redux";
+
 import {
   ThemeProvider,
   DarkTheme,
@@ -13,6 +14,9 @@ import { Stack } from "expo-router";
 import { PaperProvider } from "react-native-paper";
 import { StatusBar } from "expo-status-bar";
 import { initializeI18N } from "../src/dict/initializer";
+
+// import { initializeAuth, getReactNativePersistence } from "firebase/auth";
+// import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 
 export {
   // Catch any errors thrown by the Layout component.

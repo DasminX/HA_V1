@@ -1,18 +1,18 @@
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
+import { useTranslation } from "react-i18next";
+
 import VariantButton from "../../../../shared/components/button/VariantButton";
-import { capitalizeStr } from "../../../../shared/utils/helpers";
 import { LabelChangeAuthMode } from "../atoms/LabelChangeAuthMode";
 import { AUTH_MODE_ENUM, INPUT_VALUES_ENUM } from "../../utils/enums";
 import { CredentialsType, InputType } from "../../utils/types";
-import { authorize } from "../../utils/handlers";
 import { RegisterFormFields } from "../molecules/RegisterFormFields";
 import { CommonFormFields } from "../molecules/CommonFormFields";
 import { AuthDialog } from "../atoms/AuthDialog";
 import { COLORS } from "../../../../shared/utils/const-colors";
 import { useAuthForm } from "../../hooks/useAuthForm";
-import { AuthValidatorFactory } from "../../utils/validators";
-import { useTranslation } from "react-i18next";
+import { AuthValidatorFactory } from "../../services/validator/ValidationServiceImpl";
+import { AuthServiceFactory } from "../../services/api/AuthServiceImpl";
 
 export const DEFAULT_INPUTS_VALUES: InputType = Object.freeze({
   email: "",
@@ -33,7 +33,7 @@ export const AuthForm = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
     setIsSubmitting,
   } = useAuthForm(DEFAULT_INPUTS_VALUES, DEFAULT_CREDENTIALS);
 
-  const handleAuthClick = () => {
+  const handleAuthClick = async () => {
     setIsSubmitting(true);
     const validationResult =
       AuthValidatorFactory.initialize(mode).validateInputs(inputValues);
@@ -43,9 +43,17 @@ export const AuthForm = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
       setIsSubmitting(false);
       return;
     }
-    const response = authorize(mode, inputValues);
+
+    const response = await AuthServiceFactory.getProperInstance(mode).authorize(
+      inputValues.email,
+      inputValues.password
+    );
+    console.log(response);
+
+    setIsSubmitting(false);
   };
 
+  // TODO SNACKBAR
   return (
     <View style={styles.form}>
       <Text variant="titleLarge">{t(`auth.${mode.toLowerCase()}`)}</Text>
@@ -56,7 +64,11 @@ export const AuthForm = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
           dispatch={dispatchInputValues}
         />
       )}
-      <VariantButton onPress={handleAuthClick} loading={isSubmitting}>
+      <VariantButton
+        onPress={handleAuthClick}
+        loading={isSubmitting}
+        disabled={isSubmitting}
+      >
         {t(`auth.${mode.toLowerCase()}`)}
       </VariantButton>
       <LabelChangeAuthMode mode={mode} />

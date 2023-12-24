@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Dialog, DialogProps, Portal, Text } from "react-native-paper";
 import VariantButton from "../../../../shared/components/button/VariantButton";
-import { camelCaseStr, capitalizeStr } from "../../../../shared/utils/helpers";
+import { camelCaseStr } from "../../../../shared/utils/helpers";
 import { useTranslation } from "react-i18next";
 
 type AuthDialogType = (

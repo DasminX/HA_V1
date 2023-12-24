@@ -1,13 +1,13 @@
 import { Reducer, useReducer, useState } from "react";
 import { ActionType, CredentialsType, InputType } from "../utils/types";
-import { reducerHandler } from "../utils/handlers";
+import { inputValuesReducer } from "../utils/handlers";
 
 export const useAuthForm = (
   DEFAULT_INPUTS_VALUES: InputType,
   DEFAULT_CREDENTIALS: CredentialsType
 ) => {
   const [inputValues, dispatch] = useReducer<Reducer<InputType, ActionType>>(
-    reducerHandler,
+    inputValuesReducer,
     DEFAULT_INPUTS_VALUES
   );
   const [isWrongCredentials, setIsWrongCredentials] =

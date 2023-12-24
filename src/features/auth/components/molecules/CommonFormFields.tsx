@@ -1,6 +1,6 @@
 import { Dispatch } from "react";
 import OutlinedInput from "../../../../shared/components/input/OutlinedInput";
-import { ActionType, InputType } from "../../utils/types";
+import { ActionType } from "../../utils/types";
 import { INPUT_VALUES_ENUM } from "../../utils/enums";
 import { useTranslation } from "react-i18next";
 

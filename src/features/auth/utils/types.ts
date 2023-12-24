@@ -26,18 +26,33 @@ export type SuccessRegisterHandlerResponse = {
 export type RegisterHandlerType = (
   mode: keyof typeof AUTH_MODE_ENUM,
   inputValues: InputType
-) => Promise<Response>;
+) => Promise<unknown>;
 
 export type CredentialsType = {
   readonly bool: boolean;
   readonly cause: string;
 };
 
-export type HttpMethod =
-  | "GET"
-  | "POST"
-  | "PUT"
-  | "DELETE"
-  | "PATCH"
-  | "OPTIONS"
-  | "HEAD";
+export type FirebaseLoginSuccess = {
+  mode: keyof typeof AUTH_MODE_ENUM;
+  status: "success";
+  token: string;
+  expiresIn: string;
+  message: `auth.successfulSignin`;
+};
+
+export type FirebaseRegisterSuccess = {
+  mode: keyof typeof AUTH_MODE_ENUM;
+  status: "success";
+  message: `auth.successfulSignup`;
+};
+
+export type FirebaseAuthError = {
+  status: "error";
+  cause: string;
+};
+
+export type FirebaseAuthCallReturntype =
+  | FirebaseLoginSuccess
+  | FirebaseRegisterSuccess
+  | FirebaseAuthError;

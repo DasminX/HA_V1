@@ -1,35 +1,11 @@
-import { AUTH_MODE_ENUM, INPUT_VALUES_ENUM } from "./enums";
+import { AUTH_MODE_ENUM } from "../../utils/enums";
 import {
   ErrorRegisterHandlerResponse,
   InputType,
   SuccessRegisterHandlerResponse,
-} from "./types";
-
-class ValidationErrorGenerator {
-  public static generate(
-    entry: keyof typeof INPUT_VALUES_ENUM
-  ): ErrorRegisterHandlerResponse {
-    return {
-      status: "error",
-      cause: INPUT_VALUES_ENUM[entry],
-    };
-  }
-}
-
-interface Validator {
-  validateInputs(
-    inputValues: InputType
-  ): SuccessRegisterHandlerResponse | ErrorRegisterHandlerResponse;
-}
-
-abstract class BaseAuthValidator implements Validator {
-  protected abstract _validateEmail(email: string): boolean;
-  protected abstract _validatePassword(password: string): boolean;
-
-  public abstract validateInputs(
-    inputValues: InputType
-  ): SuccessRegisterHandlerResponse | ErrorRegisterHandlerResponse;
-}
+} from "../../utils/types";
+import { ValidationErrorGenerator } from "./ValidationErrorGeneratorImpl";
+import { BaseAuthValidator, Validator } from "./ValidationService";
 
 export class AuthValidatorFactory {
   static initialize(_mode: AUTH_MODE_ENUM): Validator {
@@ -64,7 +40,7 @@ class AuthValidatorLogin extends BaseAuthValidator {
     if (!this._validatePassword(inputValues.password))
       return ValidationErrorGenerator.generate("PASSWORD");
 
-    return { status: "validated" } as SuccessRegisterHandlerResponse;
+    return { status: "validated" };
   }
 }
 

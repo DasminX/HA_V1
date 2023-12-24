@@ -1,8 +1,7 @@
-import { ApiAuth } from "../services/api";
 import { INPUT_VALUES_ENUM } from "./enums";
 import { ActionType, InputType, RegisterHandlerType } from "./types";
 
-export const reducerHandler = (state: InputType, action: ActionType) => {
+export const inputValuesReducer = (state: InputType, action: ActionType) => {
   switch (action.type) {
     case INPUT_VALUES_ENUM.EMAIL:
       if (!action.payload) return { ...state };
@@ -18,10 +17,4 @@ export const reducerHandler = (state: InputType, action: ActionType) => {
     default:
       return { ...state };
   }
-};
-
-export const authorize: RegisterHandlerType = async (mode, inputValues) => {
-  const api = ApiAuth.getInstance(mode);
-  const response = await api.call(mode, { method: "POST", data: inputValues });
-  return response;
 };
