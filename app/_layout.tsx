@@ -14,6 +14,7 @@ import { Stack } from "expo-router";
 import { PaperProvider } from "react-native-paper";
 import { StatusBar } from "expo-status-bar";
 import { initializeI18N } from "../src/dict/initializer";
+import { rootStore } from "../src/store/rootStore";
 
 // import { initializeAuth, getReactNativePersistence } from "firebase/auth";
 // import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
@@ -55,12 +56,14 @@ export default function RootLayout() {
 
   initializeI18N();
   return (
-    <PaperProvider>
-      <StatusBar style="light" />
-      <Stack initialRouteName="(auth)" screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(auth)" />
-        <Stack.Screen name="(dashboard)" />
-      </Stack>
-    </PaperProvider>
+    <StoreProvider store={rootStore}>
+      <PaperProvider>
+        <StatusBar style="light" />
+        <Stack initialRouteName="(auth)" screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(auth)" />
+          <Stack.Screen name="(dashboard)" />
+        </Stack>
+      </PaperProvider>
+    </StoreProvider>
   );
 }

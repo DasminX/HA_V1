@@ -40,17 +40,18 @@ export class AuthServiceLogin extends AuthServiceInstance {
       await AsyncStorage.setItem("DX_HA_APP_V1_AUTHTOKEN", result.token);
 
       return {
-        mode: "LOGIN",
         status: "success",
+        mode: "LOGIN",
         token: result.token,
-        expiresIn: result.expirationTime,
+        expiresIn: new Date(result.expirationTime).getTime(),
         message: "auth.successfulSignin",
-      } as const;
+      } as FirebaseLoginSuccess;
     } catch (error) {
       return {
         status: "error",
-        cause: (error as string) ?? "Unknown",
-      } as const;
+        mode: "LOGIN",
+        cause: `${error}` ?? "Unknown",
+      } as FirebaseAuthError;
     }
   }
 }
@@ -70,15 +71,16 @@ export class AuthServiceRegister extends AuthServiceInstance {
       await sendEmailVerification(response.user);
 
       return {
-        mode: "REGISTER",
         status: "success",
+        mode: "REGISTER",
         message: "auth.successfulSignup",
-      } as const;
+      } as FirebaseRegisterSuccess;
     } catch (error) {
       return {
         status: "error",
-        cause: (error as string) ?? "Unknown",
-      } as const;
+        mode: "REGISTER",
+        cause: `${error}` ?? "Unknown",
+      } as FirebaseAuthError;
     }
   }
 }

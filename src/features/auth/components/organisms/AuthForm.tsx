@@ -13,6 +13,9 @@ import { COLORS } from "../../../../shared/utils/const-colors";
 import { useAuthForm } from "../../hooks/useAuthForm";
 import { AuthValidatorFactory } from "../../services/validator/ValidationServiceImpl";
 import { AuthServiceFactory } from "../../services/api/AuthServiceImpl";
+import { useDispatch } from "react-redux";
+import { setToken } from "../../slices/authSlice";
+import { useRouter } from "expo-router";
 
 export const DEFAULT_INPUTS_VALUES: InputType = Object.freeze({
   email: "",
@@ -23,6 +26,8 @@ export const DEFAULT_INPUTS_VALUES: InputType = Object.freeze({
 export const DEFAULT_CREDENTIALS: CredentialsType = { bool: false, cause: "" };
 
 export const AuthForm = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const { t } = useTranslation();
   const {
     inputValues,
@@ -40,17 +45,31 @@ export const AuthForm = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
 
     if (validationResult.status === "error") {
       setIsWrongCredentials({ bool: true, cause: validationResult.cause });
-      setIsSubmitting(false);
-      return;
+      return setIsSubmitting(false);
     }
 
     const response = await AuthServiceFactory.getProperInstance(mode).authorize(
       inputValues.email,
       inputValues.password
     );
-    console.log(response);
-
     setIsSubmitting(false);
+
+    if (response.status === "error") {
+      setIsWrongCredentials({ bool: true, cause: response.cause });
+      return;
+    }
+
+    switch (response.mode) {
+      case AUTH_MODE_ENUM.LOGIN:
+        dispatch(
+          setToken({ token: response.token, expiresIn: response.expiresIn })
+        );
+        router.replace("/(dashboard)/dashboard");
+        break;
+      case AUTH_MODE_ENUM.REGISTER:
+        router.replace("/(auth)/login");
+        break;
+    }
   };
 
   // TODO SNACKBAR

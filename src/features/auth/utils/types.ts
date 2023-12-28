@@ -1,23 +1,23 @@
 import { CamelCase } from "../../../shared/utils/types";
 import { AUTH_MODE_ENUM, INPUT_VALUES_ENUM } from "./enums";
 
-export type ActionType = {
-  readonly type: INPUT_VALUES_ENUM;
-  readonly payload?: string;
-};
+export type ActionType = Readonly<{
+  type: INPUT_VALUES_ENUM;
+  payload?: string;
+}>;
 
-export type InputType = {
-  readonly [K in CamelCase<
+export type InputType = Readonly<{
+  [K in CamelCase<
     Lowercase<keyof typeof INPUT_VALUES_ENUM>
   >]: K extends "privacyPolicy" ? boolean : string;
-};
+}>;
 
-export type AuthPathType = Lowercase<keyof typeof AUTH_MODE_ENUM>;
+export type AuthPathType = Readonly<Lowercase<keyof typeof AUTH_MODE_ENUM>>;
 
-export type ErrorRegisterHandlerResponse = {
+export type ErrorRegisterHandlerResponse = Readonly<{
   readonly status: "error";
   readonly cause: keyof typeof INPUT_VALUES_ENUM;
-};
+}>;
 
 export type SuccessRegisterHandlerResponse = {
   readonly status: "validated";
@@ -28,31 +28,26 @@ export type RegisterHandlerType = (
   inputValues: InputType
 ) => Promise<unknown>;
 
-export type CredentialsType = {
-  readonly bool: boolean;
-  readonly cause: string;
-};
+export type CredentialsType = Readonly<{
+  bool: boolean;
+  cause: string;
+}>;
 
-export type FirebaseLoginSuccess = {
-  mode: keyof typeof AUTH_MODE_ENUM;
+export type FirebaseLoginSuccess = Readonly<{
+  mode: (typeof AUTH_MODE_ENUM)["LOGIN"];
   status: "success";
-  token: string;
-  expiresIn: string;
   message: `auth.successfulSignin`;
-};
+  token: string;
+  expiresIn: number;
+}>;
 
-export type FirebaseRegisterSuccess = {
-  mode: keyof typeof AUTH_MODE_ENUM;
+export type FirebaseRegisterSuccess = Readonly<{
+  mode: (typeof AUTH_MODE_ENUM)["REGISTER"];
   status: "success";
   message: `auth.successfulSignup`;
-};
+}>;
 
-export type FirebaseAuthError = {
+export type FirebaseAuthError = Readonly<{
   status: "error";
   cause: string;
-};
-
-export type FirebaseAuthCallReturntype =
-  | FirebaseLoginSuccess
-  | FirebaseRegisterSuccess
-  | FirebaseAuthError;
+}>;

@@ -1,9 +1,5 @@
-import { FirebaseAuthCallReturntype } from "../../utils/types";
 export abstract class AuthServiceInstance {
-  public authorize(
-    email: string,
-    password: string
-  ): Promise<FirebaseAuthCallReturntype> {
+  public authorize(email: string, password: string): Promise<unknown> {
     return new Promise((_, reject) => reject(new Error("Not implemented!")));
   }
 }

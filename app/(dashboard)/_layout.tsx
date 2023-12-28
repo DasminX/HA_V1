@@ -1,13 +1,20 @@
-import { Tabs } from "expo-router";
+import { Stack } from "expo-router";
+import { Drawer } from "react-native-paper";
+import { withAuth } from "../../src/shared/hoc/withAuth";
 
-export default function DasboardLayout() {
+function DasboardLayout() {
   return (
-    <Tabs
+    <Stack
       screenOptions={{
         headerShown: false,
       }}
+      initialRouteName="dashboard"
     >
-      <Tabs.Screen name="index" />
-    </Tabs>
+      <Stack.Screen name="dashboard" />
+      {/* <Stack.Screen name="settings" /> */}
+      {/* <Stack.Screen name="new" /> */}
+    </Stack>
   );
 }
+
+export default withAuth(DasboardLayout);
