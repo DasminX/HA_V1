@@ -1,5 +1,4 @@
 import { Stack } from "expo-router";
-import { Drawer } from "react-native-paper";
 import { withAuth } from "../../src/shared/hoc/withAuth";
 
 function DasboardLayout() {

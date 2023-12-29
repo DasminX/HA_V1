@@ -12,7 +12,7 @@ export const initializeI18N = () => {
           translation: value,
         },
       }),
-      {}
+      {},
     ),
     lng: "pl",
   });

@@ -1,5 +1,5 @@
 import { INPUT_VALUES_ENUM } from "./enums";
-import { ActionType, InputType, RegisterHandlerType } from "./types";
+import { type ActionType, type InputType } from "./types";
 
 export const inputValuesReducer = (state: InputType, action: ActionType) => {
   switch (action.type) {

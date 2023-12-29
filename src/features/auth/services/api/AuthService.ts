@@ -1,5 +1,5 @@
 export abstract class AuthServiceInstance {
-  public authorize(email: string, password: string): Promise<unknown> {
+  public authorize(_: string, __: string): Promise<unknown> {
     return new Promise((_, reject) => reject(new Error("Not implemented!")));
   }
 }

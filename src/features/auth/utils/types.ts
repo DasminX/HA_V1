@@ -1,5 +1,5 @@
-import { CamelCase } from "../../../shared/utils/types";
-import { AUTH_MODE_ENUM, INPUT_VALUES_ENUM } from "./enums";
+import { type CamelCase } from "../../../shared/utils/types";
+import { type AUTH_MODE_ENUM, type INPUT_VALUES_ENUM } from "./enums";
 
 export type ActionType = Readonly<{
   type: INPUT_VALUES_ENUM;
@@ -7,9 +7,9 @@ export type ActionType = Readonly<{
 }>;
 
 export type InputType = Readonly<{
-  [K in CamelCase<
-    Lowercase<keyof typeof INPUT_VALUES_ENUM>
-  >]: K extends "privacyPolicy" ? boolean : string;
+  [K in CamelCase<Lowercase<keyof typeof INPUT_VALUES_ENUM>>]: K extends "privacyPolicy"
+    ? boolean
+    : string;
 }>;
 
 export type AuthPathType = Readonly<Lowercase<keyof typeof AUTH_MODE_ENUM>>;
@@ -25,7 +25,7 @@ export type SuccessRegisterHandlerResponse = {
 
 export type RegisterHandlerType = (
   mode: keyof typeof AUTH_MODE_ENUM,
-  inputValues: InputType
+  inputValues: InputType,
 ) => Promise<unknown>;
 
 export type CredentialsType = Readonly<{

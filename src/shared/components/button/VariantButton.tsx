@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from "react-native-paper";
+import { Button, type ButtonProps } from "react-native-paper";
 import { StyleSheet } from "react-native";
 import { COLORS } from "../../utils/const-colors";
 

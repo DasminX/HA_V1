@@ -1,16 +1,9 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
-import { SplashScreen } from "expo-router";
+import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { Provider as StoreProvider } from "react-redux";
 
-import {
-  ThemeProvider,
-  DarkTheme,
-  DefaultTheme,
-} from "@react-navigation/native";
-import { useColorScheme } from "react-native";
-import { Stack } from "expo-router";
 import { PaperProvider } from "react-native-paper";
 import { StatusBar } from "expo-status-bar";
 import { initializeI18N } from "../src/dict/initializer";

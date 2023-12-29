@@ -1,10 +1,10 @@
 import { Link } from "expo-router";
 import { Text } from "react-native-paper";
+import { useTranslation } from "react-i18next";
 import { capitalizeStr } from "../../../../shared/utils/helpers";
 import { COLORS } from "../../../../shared/utils/const-colors";
 import { AUTH_MODE_ENUM } from "../../utils/enums";
-import { AuthPathType } from "../../utils/types";
-import { useTranslation } from "react-i18next";
+import { type AuthPathType } from "../../utils/types";
 
 export const LabelChangeAuthMode = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
   const { t } = useTranslation();
@@ -15,17 +15,13 @@ export const LabelChangeAuthMode = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
       : AUTH_MODE_ENUM.REGISTER.toLowerCase()
   ) as AuthPathType;
 
-  const translatedText =
-    oppositePath === "login" ? "havingAccount" : "notHavingAccount";
+  const translatedText = oppositePath === "login" ? "havingAccount" : "notHavingAccount";
 
   return (
     <Text variant="labelLarge">
       {t(`auth.${translatedText}`)}{" "}
       <Text variant="bodyLarge">
-        <Link
-          style={{ color: COLORS.variants.blue }}
-          href={`/(auth)/${oppositePath}`}
-        >
+        <Link style={{ color: COLORS.variants.blue }} href={`/(auth)/${oppositePath}`}>
           {capitalizeStr(t(`auth.${oppositePath}`))}
         </Link>
       </Text>

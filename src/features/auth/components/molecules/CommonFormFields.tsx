@@ -1,9 +1,7 @@
-import { Dispatch } from "react";
-import OutlinedInput from "../../../../shared/components/input/OutlinedInput";
-import { ActionType } from "../../utils/types";
-import { INPUT_VALUES_ENUM } from "../../utils/enums";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
+import OutlinedInput from "../../../../shared/components/input/OutlinedInput";
+import { INPUT_VALUES_ENUM } from "../../utils/enums";
 import { setInputValues } from "../../slices/authInputValuesSlice";
 
 export const CommonFormFields = () => {
@@ -18,18 +16,14 @@ export const CommonFormFields = () => {
         placeholder="user@example.com"
         autoCapitalize="none"
         onChangeText={(text) =>
-          dispatch(
-            setInputValues({ type: INPUT_VALUES_ENUM.EMAIL, payload: text })
-          )
+          dispatch(setInputValues({ type: INPUT_VALUES_ENUM.EMAIL, payload: text }))
         }
       />
       <OutlinedInput
         secureTextEntry={true}
         label={t("auth.password")}
         onChangeText={(text) =>
-          dispatch(
-            setInputValues({ type: INPUT_VALUES_ENUM.PASSWORD, payload: text })
-          )
+          dispatch(setInputValues({ type: INPUT_VALUES_ENUM.PASSWORD, payload: text }))
         }
       />
     </>

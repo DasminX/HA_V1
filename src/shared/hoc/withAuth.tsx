@@ -1,7 +1,7 @@
-import { ElementType } from "react";
+import { type ElementType } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/rootStore";
 import { useRouter } from "expo-router";
+import { type RootState } from "../../store/rootStore";
 import { validateAuth } from "../utils/validate-auth";
 import { resetToken } from "../../features/auth/slices/authSlice";
 

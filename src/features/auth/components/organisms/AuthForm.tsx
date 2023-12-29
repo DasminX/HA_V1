@@ -28,17 +28,13 @@ export const AuthForm = memo(
         <Text variant="titleLarge">{t(`auth.${mode.toLowerCase()}`)}</Text>
         <CommonFormFields />
         {mode === AUTH_MODE_ENUM.REGISTER && <RegisterFormFields />}
-        <VariantButton
-          onPress={handleSubmit}
-          loading={isSubmitting}
-          disabled={isSubmitting}
-        >
+        <VariantButton onPress={handleSubmit} loading={isSubmitting} disabled={isSubmitting}>
           {t(`auth.${mode.toLowerCase()}`)}
         </VariantButton>
         <LabelChangeAuthMode mode={mode} />
       </View>
     );
-  }
+  },
 );
 
 const styles = StyleSheet.create({

@@ -1,11 +1,11 @@
-import { AUTH_MODE_ENUM } from "../../utils/enums";
+import { type AUTH_MODE_ENUM } from "../../utils/enums";
 import {
-  ErrorRegisterHandlerResponse,
-  InputType,
-  SuccessRegisterHandlerResponse,
+  type ErrorRegisterHandlerResponse,
+  type InputType,
+  type SuccessRegisterHandlerResponse,
 } from "../../utils/types";
 import { ValidationErrorGenerator } from "./ValidationErrorGeneratorImpl";
-import { BaseAuthValidator, Validator } from "./ValidationService";
+import { BaseAuthValidator, type Validator } from "./ValidationService";
 
 export class AuthValidatorFactory {
   static initialize(_mode: AUTH_MODE_ENUM): Validator {
@@ -26,17 +26,15 @@ class AuthValidatorLogin extends BaseAuthValidator {
   }
 
   protected _validatePassword(password: string) {
-    return new RegExp(
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-      "gi"
-    ).test(password);
+    return new RegExp(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/, "gi").test(
+      password,
+    );
   }
 
   public validateInputs(
-    inputValues: InputType
+    inputValues: InputType,
   ): SuccessRegisterHandlerResponse | ErrorRegisterHandlerResponse {
-    if (!this._validateEmail(inputValues.email))
-      return ValidationErrorGenerator.generate("EMAIL");
+    if (!this._validateEmail(inputValues.email)) return ValidationErrorGenerator.generate("EMAIL");
     if (!this._validatePassword(inputValues.password))
       return ValidationErrorGenerator.generate("PASSWORD");
 
@@ -57,9 +55,7 @@ class AuthValidatorRegister extends AuthValidatorLogin {
     const baseValidationResult = super.validateInputs(inputValues);
     if (baseValidationResult.status === "error") return baseValidationResult;
 
-    if (
-      !this._arePasswordsSame(inputValues.password, inputValues.repeatPassword)
-    )
+    if (!this._arePasswordsSame(inputValues.password, inputValues.repeatPassword))
       return ValidationErrorGenerator.generate("REPEAT_PASSWORD");
     if (!this._isPrivacyPolicy(inputValues.privacyPolicy))
       return ValidationErrorGenerator.generate("PRIVACY_POLICY");

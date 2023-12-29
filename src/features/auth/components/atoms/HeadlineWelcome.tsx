@@ -1,6 +1,6 @@
 import { Headline, Text } from "react-native-paper";
-import { COLORS } from "../../../../shared/utils/const-colors";
 import { useTranslation } from "react-i18next";
+import { COLORS } from "../../../../shared/utils/const-colors";
 
 export const HeadlineWelcome = () => {
   const { t } = useTranslation();

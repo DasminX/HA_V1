@@ -10,7 +10,7 @@ import { AuthValidatorFactory } from "../services/validator/ValidationServiceImp
 import { AuthServiceFactory } from "../services/api/AuthServiceImpl";
 import { setToken } from "../slices/authSlice";
 import { AuthDialog } from "../components/atoms/AuthDialog";
-import { CredentialsType } from "../utils/types";
+import { type CredentialsType } from "../utils/types";
 import { useAppSelector } from "../../../shared/hooks/redux-hooks";
 
 const DEFAULT_IS_FORM_INVALID: CredentialsType = { bool: false, cause: "" };
@@ -18,17 +18,14 @@ const DEFAULT_IS_FORM_INVALID: CredentialsType = { bool: false, cause: "" };
 export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isFormInvalid, setIsFormInvalid] = useState<CredentialsType>(
-    DEFAULT_IS_FORM_INVALID
-  );
+  const [isFormInvalid, setIsFormInvalid] = useState<CredentialsType>(DEFAULT_IS_FORM_INVALID);
   const dispatch = useDispatch();
 
   const inputValues = useAppSelector((state) => state.authInputValues);
 
   const handleSubmit = useCallback(async () => {
     setIsSubmitting(true);
-    const validationResult =
-      AuthValidatorFactory.initialize(mode).validateInputs(inputValues);
+    const validationResult = AuthValidatorFactory.initialize(mode).validateInputs(inputValues);
 
     if (validationResult.status === "error") {
       setIsFormInvalid({
@@ -40,7 +37,7 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
 
     const response = await AuthServiceFactory.getProperInstance(mode).authorize(
       inputValues.email,
-      inputValues.password
+      inputValues.password,
     );
     setIsSubmitting(false);
 
@@ -54,9 +51,7 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
 
     switch (response.mode) {
       case AUTH_MODE_ENUM.LOGIN:
-        dispatch(
-          setToken({ token: response.token, expiresIn: response.expiresIn })
-        );
+        dispatch(setToken({ token: response.token, expiresIn: response.expiresIn }));
         router.replace("/(dashboard)/dashboard");
         break;
       case AUTH_MODE_ENUM.REGISTER:
@@ -68,11 +63,7 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
   return (
     <View style={styles.root}>
       {mode === AUTH_MODE_ENUM.LOGIN && <HeadlineWelcome />}
-      <AuthForm
-        mode={mode}
-        isSubmitting={isSubmitting}
-        handleSubmit={handleSubmit}
-      />
+      <AuthForm mode={mode} isSubmitting={isSubmitting} handleSubmit={handleSubmit} />
       <AuthDialog
         visible={isFormInvalid.bool}
         onDismiss={() => setIsFormInvalid({ bool: false, cause: "" })}

@@ -1,14 +1,11 @@
-import { ReactNode } from "react";
-import { Dialog, DialogProps, Portal, Text } from "react-native-paper";
+import { type ReactNode } from "react";
+import { Dialog, type DialogProps, Portal, Text } from "react-native-paper";
+import { useTranslation } from "react-i18next";
 import VariantButton from "../../../../shared/components/button/VariantButton";
 import { camelCaseStr } from "../../../../shared/utils/helpers";
-import { useTranslation } from "react-i18next";
 
 type AuthDialogType = (
-  props: Omit<
-    DialogProps & { cause: string /* description?: string  */ },
-    "children"
-  >
+  props: Omit<DialogProps & { cause: string /* description?: string  */ }, "children">,
 ) => ReactNode;
 
 export const AuthDialog: AuthDialogType = (props) => {

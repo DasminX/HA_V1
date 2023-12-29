@@ -1,4 +1,4 @@
-import { ScrollView, View } from "react-native";
+import { View } from "react-native";
 import { Text } from "react-native-paper";
 
 export const DashboardContainer = () => {

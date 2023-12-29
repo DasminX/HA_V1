@@ -1,15 +1,15 @@
-import { AUTH_MODE_ENUM } from "../../utils/enums";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { FIREBASE_AUTH } from "../../../../../firebaseConfig";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { type AUTH_MODE_ENUM } from "../../utils/enums";
+import { FIREBASE_AUTH } from "../../../../../firebaseConfig";
 import {
-  FirebaseAuthError,
-  FirebaseLoginSuccess,
-  FirebaseRegisterSuccess,
+  type FirebaseAuthError,
+  type FirebaseLoginSuccess,
+  type FirebaseRegisterSuccess,
 } from "../../utils/types";
 import { AuthServiceInstance } from "./AuthService";
 
@@ -27,14 +27,10 @@ export class AuthServiceFactory {
 export class AuthServiceLogin extends AuthServiceInstance {
   public async authorize(
     email: string,
-    password: string
+    password: string,
   ): Promise<FirebaseLoginSuccess | FirebaseAuthError> {
     try {
-      const response = await signInWithEmailAndPassword(
-        FIREBASE_AUTH,
-        email,
-        password
-      );
+      const response = await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
       const result = await response.user.getIdTokenResult();
 
       await AsyncStorage.setItem("DX_HA_APP_V1_AUTHTOKEN", result.token);
@@ -59,14 +55,10 @@ export class AuthServiceLogin extends AuthServiceInstance {
 export class AuthServiceRegister extends AuthServiceInstance {
   public async authorize(
     email: string,
-    password: string
+    password: string,
   ): Promise<FirebaseRegisterSuccess | FirebaseAuthError> {
     try {
-      const response = await createUserWithEmailAndPassword(
-        FIREBASE_AUTH,
-        email,
-        password
-      );
+      const response = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
 
       await sendEmailVerification(response.user);
 

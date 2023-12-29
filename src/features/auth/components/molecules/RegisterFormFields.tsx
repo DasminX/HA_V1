@@ -1,20 +1,16 @@
 import { StyleSheet, View } from "react-native";
-import OutlinedInput from "../../../../shared/components/input/OutlinedInput";
 import { Checkbox, Text } from "react-native-paper";
-import { ActionType, InputType } from "../../utils/types";
-import { INPUT_VALUES_ENUM } from "../../utils/enums";
-import { Dispatch } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
+import { INPUT_VALUES_ENUM } from "../../utils/enums";
+import OutlinedInput from "../../../../shared/components/input/OutlinedInput";
 import { setInputValues } from "../../slices/authInputValuesSlice";
-import { RootState } from "../../../../store/rootStore";
+import { type RootState } from "../../../../store/rootStore";
 
 export const RegisterFormFields = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const isPrivacyPolicy = useSelector(
-    (state: RootState) => state.authContainer.inputsValues.privacyPolicy
-  );
+  const isPrivacyPolicy = useSelector((state: RootState) => state.authInputValues.privacyPolicy);
 
   return (
     <>
@@ -26,7 +22,7 @@ export const RegisterFormFields = () => {
             setInputValues({
               type: INPUT_VALUES_ENUM.REPEAT_PASSWORD,
               payload: text,
-            })
+            }),
           )
         }
       />
@@ -38,7 +34,7 @@ export const RegisterFormFields = () => {
               setInputValues({
                 type: INPUT_VALUES_ENUM.REPEAT_PASSWORD,
                 payload: !isPrivacyPolicy,
-              })
+              }),
             );
           }}
         />

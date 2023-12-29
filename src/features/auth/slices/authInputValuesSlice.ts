@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { CredentialsType, InputType } from "../utils/types";
+import { type InputType } from "../utils/types";
 import { INPUT_VALUES_ENUM } from "../utils/enums";
 
 const DEFAULT_INPUTS_VALUES: InputType = Object.freeze({
@@ -35,7 +35,6 @@ export const authInputValuesSlice = createSlice({
   },
 });
 
-export const { setInputValues, resetInputValues } =
-  authInputValuesSlice.actions;
+export const { setInputValues, resetInputValues } = authInputValuesSlice.actions;
 
 export default authInputValuesSlice.reducer;
