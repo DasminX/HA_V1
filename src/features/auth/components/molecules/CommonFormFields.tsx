@@ -16,14 +16,14 @@ export const CommonFormFields = () => {
         placeholder="user@example.com"
         autoCapitalize="none"
         onChangeText={(text) =>
-          dispatch(setInputValues({ type: INPUT_VALUES_ENUM.EMAIL, payload: text }))
+          dispatch(setInputValues({ type: INPUT_VALUES_ENUM.EMAIL, value: text }))
         }
       />
       <OutlinedInput
         secureTextEntry={true}
         label={t("auth.password")}
         onChangeText={(text) =>
-          dispatch(setInputValues({ type: INPUT_VALUES_ENUM.PASSWORD, payload: text }))
+          dispatch(setInputValues({ type: INPUT_VALUES_ENUM.PASSWORD, value: text }))
         }
       />
     </>

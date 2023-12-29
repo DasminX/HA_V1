@@ -21,7 +21,7 @@ export const RegisterFormFields = () => {
           dispatch(
             setInputValues({
               type: INPUT_VALUES_ENUM.REPEAT_PASSWORD,
-              payload: text,
+              value: text,
             }),
           )
         }
@@ -32,8 +32,7 @@ export const RegisterFormFields = () => {
           onPress={() => {
             dispatch(
               setInputValues({
-                type: INPUT_VALUES_ENUM.REPEAT_PASSWORD,
-                payload: !isPrivacyPolicy,
+                type: INPUT_VALUES_ENUM.PRIVACY_POLICY,
               }),
             );
           }}

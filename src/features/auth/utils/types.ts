@@ -28,7 +28,7 @@ export type RegisterHandlerType = (
   inputValues: InputType,
 ) => Promise<unknown>;
 
-export type CredentialsType = Readonly<{
+export type FormValidityType = Readonly<{
   bool: boolean;
   cause: string;
 }>;

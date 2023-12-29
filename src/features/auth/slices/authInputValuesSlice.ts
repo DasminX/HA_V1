@@ -9,12 +9,13 @@ const DEFAULT_INPUTS_VALUES: InputType = Object.freeze({
   privacyPolicy: false,
 });
 
+// TODO OTYPOWAĆ
 export const authInputValuesSlice = createSlice({
   name: "authInputValues",
   initialState: DEFAULT_INPUTS_VALUES,
   reducers: {
     setInputValues: (state, action) => {
-      switch (action.type) {
+      switch (action.payload.type) {
         case INPUT_VALUES_ENUM.EMAIL:
           state.email = action.payload;
           break;
