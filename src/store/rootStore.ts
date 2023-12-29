@@ -1,10 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { authSlice } from "../features/auth/slices/authSlice";
-import { TypedUseSelectorHook } from "react-redux";
+import authSlice from "../features/auth/slices/authSlice";
+import authInputValuesSlice from "../features/auth/slices/authInputValuesSlice";
 
 export const rootStore = configureStore({
   reducer: {
-    auth: authSlice.reducer,
+    auth: authSlice,
+    authInputValues: authInputValuesSlice,
   },
 });
 

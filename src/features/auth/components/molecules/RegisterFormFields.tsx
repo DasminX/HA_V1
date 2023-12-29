@@ -5,17 +5,16 @@ import { ActionType, InputType } from "../../utils/types";
 import { INPUT_VALUES_ENUM } from "../../utils/enums";
 import { Dispatch } from "react";
 import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { setInputValues } from "../../slices/authInputValuesSlice";
+import { RootState } from "../../../../store/rootStore";
 
-type RegisterFormFieldsProps = {
-  privacyPolicyValue: InputType["privacyPolicy"];
-  dispatch: Dispatch<ActionType>;
-};
-
-export const RegisterFormFields = ({
-  privacyPolicyValue,
-  dispatch,
-}: RegisterFormFieldsProps) => {
+export const RegisterFormFields = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const isPrivacyPolicy = useSelector(
+    (state: RootState) => state.authContainer.inputsValues.privacyPolicy
+  );
 
   return (
     <>
@@ -23,14 +22,24 @@ export const RegisterFormFields = ({
         secureTextEntry={true}
         label={t("auth.repeatPassword")}
         onChangeText={(text) =>
-          dispatch({ type: INPUT_VALUES_ENUM.REPEAT_PASSWORD, payload: text })
+          dispatch(
+            setInputValues({
+              type: INPUT_VALUES_ENUM.REPEAT_PASSWORD,
+              payload: text,
+            })
+          )
         }
       />
       <View style={styles.policy}>
         <Checkbox
-          status={privacyPolicyValue ? "checked" : "unchecked"}
+          status={isPrivacyPolicy ? "checked" : "unchecked"}
           onPress={() => {
-            dispatch({ type: INPUT_VALUES_ENUM.PRIVACY_POLICY });
+            dispatch(
+              setInputValues({
+                type: INPUT_VALUES_ENUM.REPEAT_PASSWORD,
+                payload: !isPrivacyPolicy,
+              })
+            );
           }}
         />
         <Text>{t("auth.privacyPolicy")}</Text>
