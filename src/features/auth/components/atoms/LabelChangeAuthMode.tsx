@@ -22,7 +22,7 @@ export const LabelChangeAuthMode = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
     <Text variant="labelLarge">
       {oppositePathLinkText}{" "}
       <Text variant="bodyLarge">
-        <Link style={{ color: COLORS.variants.blue }} href={`/(auth)/${oppositePath}`}>
+        <Link style={{ color: COLORS.variants.blue }} replace href={`/auth/${oppositePath}`}>
           {capitalizeStr(t(`auth.${oppositePath}`))}
         </Link>
       </Text>

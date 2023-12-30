@@ -8,6 +8,7 @@ import { PaperProvider } from "react-native-paper";
 import { initializeI18N } from "../src/dict/initializer";
 import { rootStore } from "../src/store/rootStore";
 import RootNavigation from "../src/shared/containers/RootNavigation";
+import { StatusBar } from "expo-status-bar";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -15,7 +16,7 @@ export {
 } from "expo-router";
 
 export const unstable_settings = {
-  initialRouteName: "(dashboard)",
+  initialRouteName: "/dashboard/index",
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -46,6 +47,7 @@ export default function RootLayout() {
   return (
     <StoreProvider store={rootStore}>
       <PaperProvider>
+        <StatusBar style="light" />
         <RootNavigation />
       </PaperProvider>
     </StoreProvider>

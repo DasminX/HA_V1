@@ -1,9 +1,9 @@
 import { type ElementType } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Redirect } from "expo-router";
 import { type RootState } from "../../store/rootStore";
 import { validateAuth } from "../utils/validate-auth";
 import { resetToken } from "../../features/auth/slices/authSlice";
-import { Redirect } from "expo-router";
 
 export const withAuth = (BaseComponent: ElementType) => {
   return function authenticateHOC() {
@@ -12,7 +12,7 @@ export const withAuth = (BaseComponent: ElementType) => {
 
     if (!validateAuth({ token: token, expiresIn: expiresIn })) {
       dispatch(resetToken());
-      return <Redirect href={"/(auth)/login"} />;
+      return <Redirect href={"/auth/login"} />;
     }
 
     return <BaseComponent />;
