@@ -1,4 +1,4 @@
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import { View, StyleSheet } from "react-native";
 
@@ -13,6 +13,7 @@ import { type FormValidityType } from "../utils/types";
 import { useAppDispatch, useAppSelector } from "../../../shared/hooks/redux-hooks";
 import { resetInputs } from "../slices/authInputValuesSlice";
 import { Button } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const DEFAULT_IS_FORM_INVALID: FormValidityType = { bool: false, cause: "" };
 
@@ -25,9 +26,9 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
   const inputValues = useAppSelector((state) => state.authInputValues);
 
   const handleSubmit = useCallback(async () => {
-    setIsSubmitting(true);
-
     try {
+      setIsSubmitting(true);
+
       const validationResult = AuthValidatorFactory.initialize(mode).validateInputs(inputValues);
       if (validationResult.status === "error") {
         return setIsFormInvalid({
@@ -59,9 +60,10 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
           router.replace("/auth/login");
           break;
       }
-    } catch (e) {}
-
-    setIsSubmitting(false);
+    } catch (e) {
+    } finally {
+      setIsSubmitting(false);
+    }
   }, [mode, inputValues]);
 
   // TODO ZROBIC ZAPOMNIALEM HASLO
@@ -74,15 +76,13 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
         onDismiss={useCallback(() => setIsFormInvalid({ bool: false, cause: "" }), [isFormInvalid])}
         cause={isFormInvalid.cause}
       />
-      <Link href={`/dashboard/`} replace>
-        AAAAA{" "}
-      </Link>
       <Button
         onPress={async () => {
           dispatch(resetToken());
+          await AsyncStorage.clear();
         }}
       >
-        bbbbbbbbbbb
+        RESET TOKENS
       </Button>
     </View>
   );

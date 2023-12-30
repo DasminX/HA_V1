@@ -1,12 +1,13 @@
 import { Stack } from "expo-router";
 import { withAuth } from "../../src/shared/hoc/withAuth";
+import { COLORS } from "../../src/shared/utils/const-colors";
 
 function DasboardLayout() {
-  console.log("DASH LAYOUT");
   return (
     <Stack
       screenOptions={{
         headerShown: false,
+        contentStyle: { backgroundColor: COLORS.palette.black },
       }}
       initialRouteName="index"
     >

@@ -27,8 +27,6 @@ export const useLoadAuth = () => {
     getAuthTokenProperties()
       .then(([token, expiresIn]) => {
         if (token && expiresIn && validateAuth({ token, expiresIn: +expiresIn })) {
-          console.log("in useloadauth");
-          console.log(token, expiresIn);
           dispatch(setToken({ token: token, expiresIn: +expiresIn }));
         }
       })
