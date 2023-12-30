@@ -1,6 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { type InputType } from "../utils/types";
-import { INPUT_VALUES_ENUM } from "../utils/enums";
+import { type InputType } from "./../utils/types";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 const DEFAULT_INPUTS_VALUES: InputType = Object.freeze({
   email: "",
@@ -9,33 +8,32 @@ const DEFAULT_INPUTS_VALUES: InputType = Object.freeze({
   privacyPolicy: false,
 });
 
-// TODO OTYPOWAĆ
 export const authInputValuesSlice = createSlice({
   name: "authInputValues",
   initialState: DEFAULT_INPUTS_VALUES,
   reducers: {
-    setInputValues: (state, action) => {
-      switch (action.payload.type) {
-        case INPUT_VALUES_ENUM.EMAIL:
-          state.email = action.payload;
-          break;
-        case INPUT_VALUES_ENUM.PASSWORD:
-          state.password = action.payload;
-          break;
-        case INPUT_VALUES_ENUM.REPEAT_PASSWORD:
-          state.repeatPassword = action.payload;
-          break;
-        case INPUT_VALUES_ENUM.PRIVACY_POLICY:
-          state.privacyPolicy = action.payload;
-          break;
-      }
+    setEmail: (state, action: PayloadAction<InputType["email"]>) => {
+      state.email = action.payload;
     },
-    resetInputValues: (state) => {
-      state = DEFAULT_INPUTS_VALUES;
+    setPassword: (state, action: PayloadAction<InputType["password"]>) => {
+      state.password = action.payload;
+    },
+    setRepeatPassword: (state, action: PayloadAction<InputType["repeatPassword"]>) => {
+      state.repeatPassword = action.payload;
+    },
+    setPrivacyPolicy: (state, action: PayloadAction<InputType["privacyPolicy"]>) => {
+      state.privacyPolicy = action.payload;
+    },
+    resetInputs: (state) => {
+      state.email = DEFAULT_INPUTS_VALUES.email;
+      state.password = DEFAULT_INPUTS_VALUES.password;
+      state.repeatPassword = DEFAULT_INPUTS_VALUES.repeatPassword;
+      state.privacyPolicy = DEFAULT_INPUTS_VALUES.privacyPolicy;
     },
   },
 });
 
-export const { setInputValues, resetInputValues } = authInputValuesSlice.actions;
+export const { setEmail, setPassword, setRepeatPassword, setPrivacyPolicy, resetInputs } =
+  authInputValuesSlice.actions;
 
 export default authInputValuesSlice.reducer;

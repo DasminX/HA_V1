@@ -2,18 +2,18 @@ import { useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import { View, StyleSheet } from "react-native";
 
-import { HeadlineWelcome } from "../components/atoms/HeadlineWelcome";
-import { MemoizedAuthForm } from "../components/organisms/AuthForm";
+import { AuthHeadline } from "../components/atoms/AuthHeadline";
+import { AuthForm } from "../components/organisms/AuthForm";
 import { AUTH_MODE_ENUM /* INPUT_VALUES_ENUM */ } from "../utils/enums";
 import { AuthValidatorFactory } from "../services/validator/ValidationServiceImpl";
 import { AuthServiceFactory } from "../services/api/AuthServiceImpl";
-import { setToken } from "../slices/authSlice";
+import { resetToken, setToken } from "../slices/authSlice";
 import { AuthDialog } from "../components/atoms/AuthDialog";
 import { type FormValidityType } from "../utils/types";
 import { useAppDispatch, useAppSelector } from "../../../shared/hooks/redux-hooks";
-import { resetInputValues } from "../slices/authInputValuesSlice";
-/* import { setInputValues } from "../slices/authInputValuesSlice";
- */
+import { resetInputs } from "../slices/authInputValuesSlice";
+import { Button } from "react-native-paper";
+
 const DEFAULT_IS_FORM_INVALID: FormValidityType = { bool: false, cause: "" };
 
 export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
@@ -25,9 +25,9 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
   const inputValues = useAppSelector((state) => state.authInputValues);
 
   const handleSubmit = useCallback(async () => {
-    try {
-      setIsSubmitting(true);
+    setIsSubmitting(true);
 
+    try {
       const validationResult = AuthValidatorFactory.initialize(mode).validateInputs(inputValues);
       if (validationResult.status === "error") {
         return setIsFormInvalid({
@@ -48,7 +48,7 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
         });
       }
 
-      dispatch(resetInputValues());
+      dispatch(resetInputs());
 
       switch (response.mode) {
         case AUTH_MODE_ENUM.LOGIN:
@@ -59,22 +59,29 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
           router.replace("/(auth)/login");
           break;
       }
-    } catch (e) {
-    } finally {
-      setIsSubmitting(false);
-      return;
-    }
-  }, [mode]);
+    } catch (e) {}
 
+    setIsSubmitting(false);
+  }, [mode, inputValues]);
+
+  // TODO ZROBIC ZAPOMNIALEM HASLO
   return (
     <View style={styles.root}>
-      {mode === AUTH_MODE_ENUM.LOGIN && <HeadlineWelcome />}
-      <MemoizedAuthForm mode={mode} isSubmitting={isSubmitting} handleSubmit={handleSubmit} />
+      <AuthHeadline mode={mode} />
+      <AuthForm mode={mode} isSubmitting={isSubmitting} handleSubmit={handleSubmit} />
       <AuthDialog
         visible={isFormInvalid.bool}
-        onDismiss={() => setIsFormInvalid({ bool: false, cause: "" })}
+        onDismiss={useCallback(() => setIsFormInvalid({ bool: false, cause: "" }), [isFormInvalid])}
         cause={isFormInvalid.cause}
       />
+      <Button onPress={() => router.replace("/(dashboard)/dashboard")}>AAAAAAAAAA</Button>
+      <Button
+        onPress={async () => {
+          dispatch(resetToken());
+        }}
+      >
+        bbbbbbbbbbb
+      </Button>
     </View>
   );
 };
@@ -82,7 +89,7 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
 const styles = StyleSheet.create({
   root: {
     top: "10%",
-    height: "60%",
+    height: "65%",
     width: "90%",
     alignSelf: "center",
     justifyContent: "space-evenly",

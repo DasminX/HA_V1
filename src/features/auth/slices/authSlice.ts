@@ -14,7 +14,8 @@ export const authSlice = createSlice({
       state.expiresIn = action.payload.expiresIn;
     },
     resetToken: (state) => {
-      state = AUTH_INITIAL_STATE;
+      state.token = AUTH_INITIAL_STATE.token;
+      state.expiresIn = AUTH_INITIAL_STATE.expiresIn;
     },
   },
 });

@@ -1,4 +1,4 @@
-import { type AUTH_MODE_ENUM } from "../../utils/enums";
+import { INPUT_VALUES_ENUM, type AUTH_MODE_ENUM } from "../../utils/enums";
 import {
   type ErrorRegisterHandlerResponse,
   type InputType,
@@ -34,9 +34,10 @@ class AuthValidatorLogin extends BaseAuthValidator {
   public validateInputs(
     inputValues: InputType,
   ): SuccessRegisterHandlerResponse | ErrorRegisterHandlerResponse {
-    if (!this._validateEmail(inputValues.email)) return ValidationErrorGenerator.generate("EMAIL");
+    if (!this._validateEmail(inputValues.email))
+      return ValidationErrorGenerator.generate(INPUT_VALUES_ENUM.EMAIL);
     if (!this._validatePassword(inputValues.password))
-      return ValidationErrorGenerator.generate("PASSWORD");
+      return ValidationErrorGenerator.generate(INPUT_VALUES_ENUM.PASSWORD);
 
     return { status: "validated" };
   }
@@ -56,9 +57,9 @@ class AuthValidatorRegister extends AuthValidatorLogin {
     if (baseValidationResult.status === "error") return baseValidationResult;
 
     if (!this._arePasswordsSame(inputValues.password, inputValues.repeatPassword))
-      return ValidationErrorGenerator.generate("REPEAT_PASSWORD");
+      return ValidationErrorGenerator.generate(INPUT_VALUES_ENUM.REPEAT_PASSWORD);
     if (!this._isPrivacyPolicy(inputValues.privacyPolicy))
-      return ValidationErrorGenerator.generate("PRIVACY_POLICY");
+      return ValidationErrorGenerator.generate(INPUT_VALUES_ENUM.PRIVACY_POLICY);
 
     return baseValidationResult;
   }

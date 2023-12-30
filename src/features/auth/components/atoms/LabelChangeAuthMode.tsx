@@ -15,11 +15,12 @@ export const LabelChangeAuthMode = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
       : AUTH_MODE_ENUM.REGISTER.toLowerCase()
   ) as AuthPathType;
 
-  const translatedText = oppositePath === "login" ? "havingAccount" : "notHavingAccount";
+  const oppositePathLinkText =
+    oppositePath === "login" ? t(`auth.havingAccount`) : t(`auth.notHavingAccount`);
 
   return (
     <Text variant="labelLarge">
-      {t(`auth.${translatedText}`)}{" "}
+      {oppositePathLinkText}{" "}
       <Text variant="bodyLarge">
         <Link style={{ color: COLORS.variants.blue }} href={`/(auth)/${oppositePath}`}>
           {capitalizeStr(t(`auth.${oppositePath}`))}

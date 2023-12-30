@@ -4,7 +4,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { type AUTH_MODE_ENUM } from "../../utils/enums";
+import { AUTH_MODE_ENUM } from "../../utils/enums";
 import { FIREBASE_AUTH } from "../../../../../firebaseConfig";
 import {
   type FirebaseAuthError,
@@ -12,6 +12,7 @@ import {
   type FirebaseRegisterSuccess,
 } from "../../utils/types";
 import { AuthServiceInstance } from "./AuthService";
+import { AUTH_TOKEN, AUTH_TOKEN_EXPIRESIN } from "../../../../shared/utils/async-storage-consts";
 
 export class AuthServiceFactory {
   public static getProperInstance(mode: keyof typeof AUTH_MODE_ENUM) {
@@ -32,25 +33,31 @@ export class AuthServiceLogin extends AuthServiceInstance {
     try {
       const response = await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
       const result = await response.user.getIdTokenResult();
+      const expiresInTimestamp = new Date(result.expirationTime).getTime();
 
-      await AsyncStorage.setItem("DX_HA_APP_V1_AUTHTOKEN", result.token);
+      await AsyncStorage.multiSet([
+        [AUTH_TOKEN, result.token],
+        [AUTH_TOKEN_EXPIRESIN, expiresInTimestamp.toString()],
+      ]);
 
       return {
         status: "success",
-        mode: "LOGIN",
+        mode: AUTH_MODE_ENUM.LOGIN,
         token: result.token,
-        expiresIn: new Date(result.expirationTime).getTime(),
+        expiresIn: expiresInTimestamp,
         message: "auth.successfulSignin",
       } as FirebaseLoginSuccess;
     } catch (error) {
       return {
         status: "error",
-        mode: "LOGIN",
-        cause: `${error}` ?? "Unknown",
+        mode: AUTH_MODE_ENUM.LOGIN,
+        cause: `${error}`,
       } as FirebaseAuthError;
     }
   }
 }
+
+// TODO ERRORY Z FIREBASE
 
 export class AuthServiceRegister extends AuthServiceInstance {
   public async authorize(
@@ -64,14 +71,14 @@ export class AuthServiceRegister extends AuthServiceInstance {
 
       return {
         status: "success",
-        mode: "REGISTER",
+        mode: AUTH_MODE_ENUM.REGISTER,
         message: "auth.successfulSignup",
       } as FirebaseRegisterSuccess;
     } catch (error) {
       return {
         status: "error",
-        mode: "REGISTER",
-        cause: `${error}` ?? "Unknown",
+        mode: AUTH_MODE_ENUM.REGISTER,
+        cause: `${error}`,
       } as FirebaseAuthError;
     }
   }

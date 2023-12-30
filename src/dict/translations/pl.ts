@@ -1,6 +1,7 @@
 export default {
   auth: {
     welcomeTo: "Witaj w ",
+    loginTo: "Zaloguj się na ",
     email: "Email",
     password: "Hasło",
     repeatPassword: "Powtórz hasło",

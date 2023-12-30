@@ -1,4 +1,4 @@
-import { type ReactNode } from "react";
+import { memo, type ReactNode } from "react";
 import { Dialog, type DialogProps, Portal, Text } from "react-native-paper";
 import { useTranslation } from "react-i18next";
 import VariantButton from "../../../../shared/components/button/VariantButton";
@@ -8,7 +8,7 @@ type AuthDialogType = (
   props: Omit<DialogProps & { cause: string /* description?: string  */ }, "children">,
 ) => ReactNode;
 
-export const AuthDialog: AuthDialogType = (props) => {
+export const AuthDialog: AuthDialogType = memo((props) => {
   const { t } = useTranslation();
 
   return (
@@ -34,4 +34,4 @@ export const AuthDialog: AuthDialogType = (props) => {
       </Dialog>
     </Portal>
   );
-};
+});
