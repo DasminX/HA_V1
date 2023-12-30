@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import { View, StyleSheet } from "react-native";
 
@@ -53,10 +53,10 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
       switch (response.mode) {
         case AUTH_MODE_ENUM.LOGIN:
           dispatch(setToken({ token: response.token, expiresIn: response.expiresIn }));
-          router.replace("/(dashboard)/dashboard");
+          router.replace("/dashboard/");
           break;
         case AUTH_MODE_ENUM.REGISTER:
-          router.replace("/(auth)/login");
+          router.replace("/auth/login");
           break;
       }
     } catch (e) {}
@@ -74,7 +74,9 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
         onDismiss={useCallback(() => setIsFormInvalid({ bool: false, cause: "" }), [isFormInvalid])}
         cause={isFormInvalid.cause}
       />
-      <Button onPress={() => router.replace("/(dashboard)/dashboard")}>AAAAAAAAAA</Button>
+      <Link href={`/dashboard/`} replace>
+        AAAAA{" "}
+      </Link>
       <Button
         onPress={async () => {
           dispatch(resetToken());

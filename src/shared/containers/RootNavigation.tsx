@@ -6,9 +6,9 @@ export default function RootNavigation() {
   if (!isAsyncStorageLoaded) return null;
 
   return (
-    <Stack initialRouteName="(dashboard)" screenOptions={{ headerShown: true }}>
-      <Stack.Screen name="(dashboard)" />
-      <Stack.Screen name="(auth)" />
+    <Stack initialRouteName="dashboard" screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="dashboard" />
+      <Stack.Screen name="auth" />
     </Stack>
   );
 }

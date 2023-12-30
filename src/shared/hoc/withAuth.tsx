@@ -12,7 +12,7 @@ export const withAuth = (BaseComponent: ElementType) => {
 
     if (!validateAuth({ token: token, expiresIn: expiresIn })) {
       dispatch(resetToken());
-      return <Redirect href={"/(auth)/_layout"} />;
+      return <Redirect href={"/auth/login"} />;
     }
 
     return <BaseComponent />;

@@ -8,9 +8,9 @@ function DasboardLayout() {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="dashboard"
+      initialRouteName="index"
     >
-      <Stack.Screen name="dashboard" />
+      <Stack.Screen name="index" />
     </Stack>
   );
 }
