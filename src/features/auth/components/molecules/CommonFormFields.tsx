@@ -9,6 +9,7 @@ export const CommonFormFields = memo(() => {
     setEmail: state.setEmail,
     setPassword: state.setPassword,
   }));
+
   return (
     <>
       <OutlinedInput
