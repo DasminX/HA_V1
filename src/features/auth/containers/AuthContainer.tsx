@@ -1,10 +1,14 @@
 import { useRouter } from "expo-router";
-import { useCallback, useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { useCallback, useEffect, useState } from "react";
+import { View, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
 
 import { AuthHeadline } from "../components/atoms/AuthHeadline";
 import { AuthForm } from "../components/organisms/AuthForm";
-import { AUTH_MODE_ENUM /* INPUT_VALUES_ENUM */ } from "../utils/enums";
+import {
+  AUTH_MODE_ENUM,
+  AUTH_RESPONSE_ENUM /* INPUT_VALUES_ENUM */,
+  VALIDATION_STATUS_ENUM,
+} from "../utils/enums";
 import { AuthValidatorFactory } from "../services/validator/ValidationServiceImpl";
 import { AuthServiceFactory } from "../services/api/AuthServiceImpl";
 import { resetToken, setToken } from "../slices/authSlice";
@@ -25,12 +29,17 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
   const dispatch = useAppDispatch();
   const inputValues = useAppSelector((state) => state.authInputValues);
 
+  useEffect(() => {
+    dispatch(resetInputs());
+  }, [mode]);
+
   const handleSubmit = useCallback(async () => {
     try {
       setIsSubmitting(true);
 
       const validationResult = AuthValidatorFactory.initialize(mode).validateInputs(inputValues);
-      if (validationResult.status === "error") {
+      console.log(validationResult, inputValues);
+      if (validationResult.status === VALIDATION_STATUS_ENUM.ERROR) {
         return setIsFormInvalid({
           bool: true,
           cause: validationResult.cause,
@@ -42,7 +51,7 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
         inputValues.password,
       );
 
-      if (response.status === "error") {
+      if (response.status === AUTH_RESPONSE_ENUM.ERROR) {
         return setIsFormInvalid({
           bool: true,
           cause: response.cause,
@@ -68,23 +77,31 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
 
   // TODO ZROBIC ZAPOMNIALEM HASLO
   return (
-    <View style={styles.root}>
-      <AuthHeadline mode={mode} />
-      <AuthForm mode={mode} isSubmitting={isSubmitting} handleSubmit={handleSubmit} />
-      <AuthDialog
-        visible={isFormInvalid.bool}
-        onDismiss={useCallback(() => setIsFormInvalid({ bool: false, cause: "" }), [isFormInvalid])}
-        cause={isFormInvalid.cause}
-      />
-      <Button
-        onPress={async () => {
-          dispatch(resetToken());
-          await AsyncStorage.clear();
-        }}
-      >
-        RESET TOKENS
-      </Button>
-    </View>
+    <KeyboardAvoidingView
+      style={styles.root}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <View>
+        <AuthHeadline mode={mode} />
+        <AuthForm mode={mode} isSubmitting={isSubmitting} handleSubmit={handleSubmit} />
+        <AuthDialog
+          visible={isFormInvalid.bool}
+          onDismiss={useCallback(
+            () => setIsFormInvalid({ bool: false, cause: "" }),
+            [isFormInvalid],
+          )}
+          cause={isFormInvalid.cause}
+        />
+        <Button
+          onPress={async () => {
+            dispatch(resetToken());
+            await AsyncStorage.clear();
+          }}
+        >
+          RESET TOKENS TEST
+        </Button>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 

@@ -1,13 +1,11 @@
 import {
-  type ErrorRegisterHandlerResponse,
+  type AuthFieldsValidatedSuccess,
   type InputType,
-  type SuccessRegisterHandlerResponse,
+  type AuthFieldsValidatedError,
 } from "../../utils/types";
 
 export interface Validator {
-  validateInputs(
-    inputValues: InputType,
-  ): SuccessRegisterHandlerResponse | ErrorRegisterHandlerResponse;
+  validateInputs(inputValues: InputType): AuthFieldsValidatedError | AuthFieldsValidatedSuccess;
 }
 
 export abstract class BaseAuthValidator implements Validator {
@@ -16,5 +14,5 @@ export abstract class BaseAuthValidator implements Validator {
 
   public abstract validateInputs(
     inputValues: InputType,
-  ): SuccessRegisterHandlerResponse | ErrorRegisterHandlerResponse;
+  ): AuthFieldsValidatedError | AuthFieldsValidatedSuccess;
 }

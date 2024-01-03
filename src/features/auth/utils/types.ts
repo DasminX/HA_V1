@@ -1,5 +1,10 @@
 import { type CamelCase } from "../../../shared/utils/types";
-import { type AUTH_MODE_ENUM, type INPUT_VALUES_ENUM } from "./enums";
+import {
+  VALIDATION_STATUS_ENUM,
+  type AUTH_MODE_ENUM,
+  type INPUT_VALUES_ENUM,
+  AUTH_RESPONSE_ENUM,
+} from "./enums";
 
 export type ActionType = Readonly<{
   type: INPUT_VALUES_ENUM;
@@ -14,13 +19,13 @@ export type InputType = Readonly<{
 
 export type AuthPathType = Readonly<Lowercase<keyof typeof AUTH_MODE_ENUM>>;
 
-export type ErrorRegisterHandlerResponse = Readonly<{
-  readonly status: "error";
+export type AuthFieldsValidatedError = Readonly<{
+  readonly status: VALIDATION_STATUS_ENUM.ERROR;
   readonly cause: keyof typeof INPUT_VALUES_ENUM;
 }>;
 
-export type SuccessRegisterHandlerResponse = {
-  readonly status: "validated";
+export type AuthFieldsValidatedSuccess = {
+  readonly status: VALIDATION_STATUS_ENUM.SUCCESS;
 };
 
 export type RegisterHandlerType = (
@@ -35,7 +40,7 @@ export type FormValidityType = Readonly<{
 
 export type FirebaseLoginSuccess = Readonly<{
   mode: (typeof AUTH_MODE_ENUM)["LOGIN"];
-  status: "success";
+  status: AUTH_RESPONSE_ENUM.SUCCESS;
   message: `auth.successfulSignin`;
   token: string;
   expiresIn: number;
@@ -43,11 +48,11 @@ export type FirebaseLoginSuccess = Readonly<{
 
 export type FirebaseRegisterSuccess = Readonly<{
   mode: (typeof AUTH_MODE_ENUM)["REGISTER"];
-  status: "success";
+  status: AUTH_RESPONSE_ENUM.SUCCESS;
   message: `auth.successfulSignup`;
 }>;
 
 export type FirebaseAuthError = Readonly<{
-  status: "error";
+  status: AUTH_RESPONSE_ENUM.ERROR;
   cause: string;
 }>;

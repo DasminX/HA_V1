@@ -1,8 +1,8 @@
-import { INPUT_VALUES_ENUM, type AUTH_MODE_ENUM } from "../../utils/enums";
+import { INPUT_VALUES_ENUM, type AUTH_MODE_ENUM, VALIDATION_STATUS_ENUM } from "../../utils/enums";
 import {
-  type ErrorRegisterHandlerResponse,
   type InputType,
-  type SuccessRegisterHandlerResponse,
+  type AuthFieldsValidatedError,
+  AuthFieldsValidatedSuccess,
 } from "../../utils/types";
 import { ValidationErrorGenerator } from "./ValidationErrorGeneratorImpl";
 import { BaseAuthValidator, type Validator } from "./ValidationService";
@@ -33,13 +33,13 @@ class AuthValidatorLogin extends BaseAuthValidator {
 
   public validateInputs(
     inputValues: InputType,
-  ): SuccessRegisterHandlerResponse | ErrorRegisterHandlerResponse {
+  ): AuthFieldsValidatedError | AuthFieldsValidatedSuccess {
     if (!this._validateEmail(inputValues.email))
       return ValidationErrorGenerator.generate(INPUT_VALUES_ENUM.EMAIL);
     if (!this._validatePassword(inputValues.password))
       return ValidationErrorGenerator.generate(INPUT_VALUES_ENUM.PASSWORD);
 
-    return { status: "validated" };
+    return { status: VALIDATION_STATUS_ENUM.SUCCESS };
   }
 }
 
@@ -54,7 +54,7 @@ class AuthValidatorRegister extends AuthValidatorLogin {
 
   public validateInputs(inputValues: InputType) {
     const baseValidationResult = super.validateInputs(inputValues);
-    if (baseValidationResult.status === "error") return baseValidationResult;
+    if (baseValidationResult.status === VALIDATION_STATUS_ENUM.ERROR) return baseValidationResult;
 
     if (!this._arePasswordsSame(inputValues.password, inputValues.repeatPassword))
       return ValidationErrorGenerator.generate(INPUT_VALUES_ENUM.REPEAT_PASSWORD);

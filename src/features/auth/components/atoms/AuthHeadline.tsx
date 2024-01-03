@@ -9,7 +9,7 @@ export const AuthHeadline = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
   const headlineText = mode === "LOGIN" ? t("auth.loginTo") : t("auth.welcomeTo");
 
   return (
-    <Headline style={{ textAlign: "center" }}>
+    <Headline style={{ textAlign: "center", marginVertical: 24 }}>
       {headlineText}
       <Text style={{ color: COLORS.palette.orange }}>HangAround</Text>!
     </Headline>

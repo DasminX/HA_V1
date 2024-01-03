@@ -1,3 +1,4 @@
+import { AUTH_RESPONSE_ENUM } from "./../../utils/enums";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
@@ -41,7 +42,7 @@ export class AuthServiceLogin extends AuthServiceInstance {
       ]);
 
       return {
-        status: "success",
+        status: AUTH_RESPONSE_ENUM.SUCCESS,
         mode: AUTH_MODE_ENUM.LOGIN,
         token: result.token,
         expiresIn: expiresInTimestamp,
@@ -49,7 +50,7 @@ export class AuthServiceLogin extends AuthServiceInstance {
       } as FirebaseLoginSuccess;
     } catch (error) {
       return {
-        status: "error",
+        status: AUTH_RESPONSE_ENUM.ERROR,
         mode: AUTH_MODE_ENUM.LOGIN,
         cause: `${error}`,
       } as FirebaseAuthError;
@@ -70,13 +71,13 @@ export class AuthServiceRegister extends AuthServiceInstance {
       await sendEmailVerification(response.user);
 
       return {
-        status: "success",
+        status: AUTH_RESPONSE_ENUM.SUCCESS,
         mode: AUTH_MODE_ENUM.REGISTER,
         message: "auth.successfulSignup",
       } as FirebaseRegisterSuccess;
     } catch (error) {
       return {
-        status: "error",
+        status: AUTH_RESPONSE_ENUM.ERROR,
         mode: AUTH_MODE_ENUM.REGISTER,
         cause: `${error}`,
       } as FirebaseAuthError;

@@ -9,3 +9,13 @@ export enum AUTH_MODE_ENUM {
   LOGIN = "LOGIN",
   REGISTER = "REGISTER",
 }
+
+export enum VALIDATION_STATUS_ENUM {
+  ERROR = "ERROR",
+  SUCCESS = "SUCCESS",
+}
+
+export enum AUTH_RESPONSE_ENUM {
+  ERROR = "ERROR",
+  SUCCESS = "SUCCESS",
+}
