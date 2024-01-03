@@ -25,18 +25,14 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFormInvalid, setIsFormInvalid] = useState<FormValidityType>(DEFAULT_IS_FORM_INVALID);
 
-  const { resetInputs, ...inputValues } = useAuthFormStore((state) => ({
-    resetInputs: state.resetInputValues,
-    email: state.email,
-    password: state.password,
-    repeatPassword: state.repeatPassword,
-    privacyPolicy: state.privacyPolicy,
-  }));
+  const email = useAuthFormStore((state) => state.email);
+  const password = useAuthFormStore((state) => state.password);
+  const repeatPassword = useAuthFormStore((state) => state.repeatPassword);
+  const privacyPolicy = useAuthFormStore((state) => state.privacyPolicy);
+  const resetInputs = useAuthFormStore((state) => state.resetInputValues);
 
-  const authStore = useAuthStore((state) => ({
-    setToken: state.setTokenCredentials,
-    resetToken: state.resetTokenCredentials,
-  }));
+  const setToken = useAuthStore((state) => state.setTokenCredentials);
+  const resetToken = useAuthStore((state) => state.resetTokenCredentials);
 
   useEffect(() => {
     resetInputs();
@@ -46,8 +42,13 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
     try {
       setIsSubmitting(true);
 
-      const validationResult = AuthValidatorFactory.initialize(mode).validateInputs(inputValues);
-      console.log(validationResult, inputValues);
+      const validationResult = AuthValidatorFactory.initialize(mode).validateInputs({
+        email,
+        password,
+        repeatPassword,
+        privacyPolicy,
+      });
+
       if (validationResult.status === VALIDATION_STATUS_ENUM.ERROR) {
         return setIsFormInvalid({
           bool: true,
@@ -55,10 +56,7 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
         });
       }
 
-      const response = await AuthServiceFactory.getProperInstance(mode).authorize(
-        inputValues.email,
-        inputValues.password,
-      );
+      const response = await AuthServiceFactory.getProperInstance(mode).authorize(email, password);
 
       if (response.status === AUTH_RESPONSE_ENUM.ERROR) {
         return setIsFormInvalid({
@@ -71,7 +69,7 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
 
       switch (response.mode) {
         case AUTH_MODE_ENUM.LOGIN:
-          authStore.setToken({ token: response.token, expiresIn: response.expiresIn });
+          setToken({ token: response.token, expiresIn: response.expiresIn });
           router.replace("/dashboard/");
           break;
         case AUTH_MODE_ENUM.REGISTER:
@@ -82,7 +80,7 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
     } finally {
       setIsSubmitting(false);
     }
-  }, [mode, inputValues]);
+  }, [mode, email, password, repeatPassword, privacyPolicy]);
 
   // TODO ZROBIC ZAPOMNIALEM HASLO
   return (
@@ -103,7 +101,7 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
         />
         <Button
           onPress={async () => {
-            authStore.resetToken();
+            resetToken();
             await AsyncStorage.clear();
           }}
         >

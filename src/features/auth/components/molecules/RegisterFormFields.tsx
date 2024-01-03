@@ -8,11 +8,9 @@ import { useAuthFormStore } from "../../slices/authFormInputsStore";
 export const RegisterFormFields = memo(() => {
   const { t } = useTranslation();
 
-  const { isPrivacyPolicy, setRepeatPassword, setPrivacyPolicy } = useAuthFormStore((state) => ({
-    isPrivacyPolicy: state.privacyPolicy,
-    setRepeatPassword: state.setRepeatPassword,
-    setPrivacyPolicy: state.setPrivacyPolicy,
-  }));
+  const isPrivacyPolicy = useAuthFormStore((state) => state.privacyPolicy);
+  const setRepeatPassword = useAuthFormStore((state) => state.setRepeatPassword);
+  const setPrivacyPolicy = useAuthFormStore((state) => state.setPrivacyPolicy);
 
   return (
     <>
