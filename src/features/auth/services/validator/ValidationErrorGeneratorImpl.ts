@@ -5,7 +5,7 @@ export class ValidationErrorGenerator {
   public static generate(entry: keyof typeof INPUT_VALUES_ENUM): AuthFieldsValidatedError {
     return {
       status: VALIDATION_STATUS_ENUM.ERROR,
-      cause: INPUT_VALUES_ENUM[entry],
+      cause: entry,
     };
   }
 }

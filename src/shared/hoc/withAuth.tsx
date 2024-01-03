@@ -5,14 +5,12 @@ import { useAuthStore } from "../slices/authStore";
 
 export const withAuth = (BaseComponent: ElementType) => {
   return function authenticateHOC() {
-    const authStore = useAuthStore((state) => ({
-      token: state.token,
-      expiresIn: state.expiresIn,
-      resetTokenCredentials: state.resetTokenCredentials,
-    }));
+    const token = useAuthStore((state) => state.token);
+    const expiresIn = useAuthStore((state) => state.expiresIn);
+    const resetTokenCredentials = useAuthStore((state) => state.resetTokenCredentials);
 
-    if (!validateAuth({ token: authStore.token, expiresIn: authStore.expiresIn })) {
-      authStore.resetTokenCredentials();
+    if (!validateAuth({ token: token, expiresIn: expiresIn })) {
+      resetTokenCredentials();
       return <Redirect href={"/auth/login"} />;
     }
 

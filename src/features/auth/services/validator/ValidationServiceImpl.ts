@@ -1,4 +1,4 @@
-import { INPUT_VALUES_ENUM, type AUTH_MODE_ENUM, VALIDATION_STATUS_ENUM } from "../../utils/enums";
+import { INPUT_VALUES_ENUM, AUTH_MODE_ENUM, VALIDATION_STATUS_ENUM } from "../../utils/enums";
 import {
   type InputType,
   type AuthFieldsValidatedError,
@@ -10,9 +10,9 @@ import { BaseAuthValidator, type Validator } from "./ValidationService";
 export class AuthValidatorFactory {
   static initialize(_mode: AUTH_MODE_ENUM): Validator {
     switch (_mode) {
-      case "LOGIN":
+      case AUTH_MODE_ENUM.LOGIN:
         return new AuthValidatorLogin();
-      case "REGISTER":
+      case AUTH_MODE_ENUM.REGISTER:
         return new AuthValidatorRegister();
       default:
         throw new Error("Invalid authentication mode");

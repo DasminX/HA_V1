@@ -7,20 +7,35 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AUTH_MODE_ENUM } from "../../utils/enums";
 import { FIREBASE_AUTH } from "../../../../../firebaseConfig";
-import {
-  type FirebaseAuthError,
-  type FirebaseLoginSuccess,
-  type FirebaseRegisterSuccess,
-} from "../../utils/types";
 import { AuthServiceInstance } from "./AuthService";
 import { AUTH_TOKEN, AUTH_TOKEN_EXPIRESIN } from "../../../../shared/utils/async-storage-consts";
+import { toTimestamp } from "../../../../shared/utils/date-helpers";
+
+type FirebaseLoginSuccess = Readonly<{
+  mode: AUTH_MODE_ENUM.LOGIN;
+  status: AUTH_RESPONSE_ENUM.SUCCESS;
+  message: "auth.successfulSignin";
+  token: string;
+  expiresIn: number;
+}>;
+
+type FirebaseRegisterSuccess = Readonly<{
+  mode: AUTH_MODE_ENUM.REGISTER;
+  status: AUTH_RESPONSE_ENUM.SUCCESS;
+  message: "auth.successfulSignup";
+}>;
+
+type FirebaseAuthError = Readonly<{
+  status: AUTH_RESPONSE_ENUM.ERROR;
+  message: string;
+}>;
 
 export class AuthServiceFactory {
   public static getProperInstance(mode: keyof typeof AUTH_MODE_ENUM) {
     switch (mode) {
-      case "LOGIN":
+      case AUTH_MODE_ENUM.LOGIN:
         return new AuthServiceLogin();
-      case "REGISTER":
+      case AUTH_MODE_ENUM.REGISTER:
         return new AuthServiceRegister();
     }
   }
@@ -39,7 +54,7 @@ export class AuthServiceLogin extends AuthServiceInstance {
       }
 
       const result = await user.getIdTokenResult();
-      const expiresInTimestamp = new Date(result.expirationTime).getTime();
+      const expiresInTimestamp = toTimestamp(result.expirationTime);
 
       await AsyncStorage.multiSet([
         [AUTH_TOKEN, result.token],
@@ -57,7 +72,7 @@ export class AuthServiceLogin extends AuthServiceInstance {
       return {
         status: AUTH_RESPONSE_ENUM.ERROR,
         mode: AUTH_MODE_ENUM.LOGIN,
-        cause: `${error}`,
+        message: `${error}`,
       } as FirebaseAuthError;
     }
   }
@@ -84,7 +99,7 @@ export class AuthServiceRegister extends AuthServiceInstance {
       return {
         status: AUTH_RESPONSE_ENUM.ERROR,
         mode: AUTH_MODE_ENUM.REGISTER,
-        cause: `${error}`,
+        message: `${error}`,
       } as FirebaseAuthError;
     }
   }

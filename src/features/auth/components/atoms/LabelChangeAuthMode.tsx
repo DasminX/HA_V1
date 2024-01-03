@@ -1,10 +1,11 @@
 import { Link } from "expo-router";
 import { Text } from "react-native-paper";
 import { useTranslation } from "react-i18next";
-import { capitalizeStr } from "../../../../shared/utils/helpers";
+import { capitalizeStr } from "../../../../shared/utils/string-transformators";
 import { COLORS } from "../../../../shared/utils/const-colors";
 import { AUTH_MODE_ENUM } from "../../utils/enums";
-import { type AuthPathType } from "../../utils/types";
+
+type AuthPathType = Readonly<Lowercase<keyof typeof AUTH_MODE_ENUM>>;
 
 export const LabelChangeAuthMode = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
   const { t } = useTranslation();

@@ -4,21 +4,21 @@ import { View, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
 
 import { AuthHeadline } from "../components/atoms/AuthHeadline";
 import { AuthForm } from "../components/organisms/AuthForm";
-import {
-  AUTH_MODE_ENUM,
-  AUTH_RESPONSE_ENUM /* INPUT_VALUES_ENUM */,
-  VALIDATION_STATUS_ENUM,
-} from "../utils/enums";
+import { AUTH_MODE_ENUM, AUTH_RESPONSE_ENUM, VALIDATION_STATUS_ENUM } from "../utils/enums";
 import { AuthValidatorFactory } from "../services/validator/ValidationServiceImpl";
 import { AuthServiceFactory } from "../services/api/AuthServiceImpl";
 import { AuthDialog } from "../components/atoms/AuthDialog";
-import { type FormValidityType } from "../utils/types";
 import { Button } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuthFormStore } from "../slices/authFormInputsStore";
 import { useAuthStore } from "../../../shared/slices/authStore";
 
-const DEFAULT_IS_FORM_INVALID: FormValidityType = { bool: false, cause: "" };
+type FormValidityType = Readonly<{
+  isInvalid: boolean;
+  cause: string;
+}>;
+
+const DEFAULT_IS_FORM_INVALID: FormValidityType = { isInvalid: false, cause: "" };
 
 export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
   const router = useRouter();
@@ -33,8 +33,9 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
 
   const setToken = useAuthStore((state) => state.setTokenCredentials);
   const resetToken = useAuthStore((state) => state.resetTokenCredentials);
-  /* 
-  useEffect(() => {
+
+  // todo
+  /*   useEffect(() => {
     resetInputs();
   }, [mode]); */
 
@@ -42,6 +43,7 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
     try {
       setIsSubmitting(true);
 
+      // todo simple refactor
       const validationResult = AuthValidatorFactory.initialize(mode).validateInputs({
         email,
         password,
@@ -51,18 +53,21 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
 
       if (validationResult.status === VALIDATION_STATUS_ENUM.ERROR) {
         return setIsFormInvalid({
-          bool: true,
+          isInvalid: true,
           cause: validationResult.cause,
         });
       }
 
-      const response = await AuthServiceFactory.getProperInstance(mode).authorize(email, password);
+      const authService = AuthServiceFactory.getProperInstance(mode);
+      if (authService == null) {
+        throw "errors.internalError";
+      }
 
+      const response = await authService.authorize(email, password);
       if (response.status === AUTH_RESPONSE_ENUM.ERROR) {
-        console.log(response.cause);
         return setIsFormInvalid({
-          bool: true,
-          cause: response.cause,
+          isInvalid: true,
+          cause: response.message,
         });
       }
 
@@ -78,6 +83,10 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
           break;
       }
     } catch (e) {
+      return setIsFormInvalid({
+        isInvalid: true,
+        cause: e as string,
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -93,11 +102,8 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
         <AuthHeadline mode={mode} />
         <AuthForm mode={mode} isSubmitting={isSubmitting} handleSubmit={handleSubmit} />
         <AuthDialog
-          visible={isFormInvalid.bool}
-          onDismiss={useCallback(
-            () => setIsFormInvalid({ bool: false, cause: "" }),
-            [isFormInvalid],
-          )}
+          visible={isFormInvalid.isInvalid}
+          onDismiss={useCallback(() => setIsFormInvalid(DEFAULT_IS_FORM_INVALID), [])}
           cause={isFormInvalid.cause}
         />
         <Button

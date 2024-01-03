@@ -10,32 +10,30 @@ import { RegisterFormFields } from "../molecules/RegisterFormFields";
 import { CommonFormFields } from "../molecules/CommonFormFields";
 import { COLORS } from "../../../../shared/utils/const-colors";
 
-export const AuthForm = memo(
-  ({
-    mode,
-    isSubmitting,
-    handleSubmit,
-  }: {
-    mode: AUTH_MODE_ENUM;
-    isSubmitting: boolean;
-    handleSubmit: () => void;
-  }) => {
-    const { t } = useTranslation();
+type AuthFormProps = {
+  mode: AUTH_MODE_ENUM;
+  isSubmitting: boolean;
+  handleSubmit: () => void;
+};
 
-    // TODO SNACKBAR
-    return (
-      <View style={styles.form}>
-        <Text variant="titleLarge">{t(`auth.${mode.toLowerCase()}`)}</Text>
-        <CommonFormFields />
-        {mode === AUTH_MODE_ENUM.REGISTER && <RegisterFormFields />}
-        <VariantButton onPress={handleSubmit} loading={isSubmitting} disabled={isSubmitting}>
-          {t(`auth.${mode.toLowerCase()}`)}
-        </VariantButton>
-        <LabelChangeAuthMode mode={mode} />
-      </View>
-    );
-  },
-);
+export const AuthForm = memo(({ mode, isSubmitting, handleSubmit }: AuthFormProps) => {
+  const { t } = useTranslation();
+
+  const modeLowercaseText = mode.toLowerCase();
+
+  // TODO SNACKBAR
+  return (
+    <View style={styles.form}>
+      <Text variant="titleLarge">{t(`auth.${modeLowercaseText}`)}</Text>
+      <CommonFormFields />
+      {mode === AUTH_MODE_ENUM.REGISTER && <RegisterFormFields />}
+      <VariantButton onPress={handleSubmit} loading={isSubmitting} disabled={isSubmitting}>
+        {t(`auth.${modeLowercaseText}`)}
+      </VariantButton>
+      <LabelChangeAuthMode mode={mode} />
+    </View>
+  );
+});
 
 const styles = StyleSheet.create({
   form: {

@@ -20,9 +20,7 @@ const getAuthTokenProperties = async () => {
 
 export const useLoadAuth = () => {
   const [isAsyncStorageLoaded, setIsAsyncStorageLoaded] = useState(false);
-  const { setTokenCredentials } = useAuthStore((state) => ({
-    setTokenCredentials: state.setTokenCredentials,
-  }));
+  const setTokenCredentials = useAuthStore((state) => state.setTokenCredentials);
 
   useEffect(() => {
     getAuthTokenProperties()

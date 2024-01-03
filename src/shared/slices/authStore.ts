@@ -1,5 +1,11 @@
 import { create } from "zustand";
-import { AuthCredentialsType } from "../utils/types";
+
+type AuthCredentialsType = {
+  token: string;
+  expiresIn: number;
+  setTokenCredentials: (payload: { token: string; expiresIn: number }) => void;
+  resetTokenCredentials: () => void;
+};
 
 export const useAuthStore = create<AuthCredentialsType>((set) => ({
   token: "",
