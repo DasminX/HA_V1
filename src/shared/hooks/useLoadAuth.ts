@@ -1,9 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import { AUTH_TOKEN, AUTH_TOKEN_EXPIRESIN } from "../utils/async-storage-consts";
-import { useAppDispatch } from "./redux-hooks";
-import { setToken } from "../../features/auth/slices/authSlice";
 import { validateAuth } from "../utils/validate-auth";
+import { useAuthStore } from "../slices/authStore";
 
 const getAuthTokenProperties = async () => {
   const authTokenProperties = await AsyncStorage.multiGet([AUTH_TOKEN, AUTH_TOKEN_EXPIRESIN]);
@@ -20,14 +19,16 @@ const getAuthTokenProperties = async () => {
 };
 
 export const useLoadAuth = () => {
-  const dispatch = useAppDispatch();
   const [isAsyncStorageLoaded, setIsAsyncStorageLoaded] = useState(false);
+  const { setTokenCredentials } = useAuthStore((state) => ({
+    setTokenCredentials: state.setTokenCredentials,
+  }));
 
   useEffect(() => {
     getAuthTokenProperties()
       .then(([token, expiresIn]) => {
         if (token && expiresIn && validateAuth({ token, expiresIn: +expiresIn })) {
-          dispatch(setToken({ token: token, expiresIn: +expiresIn }));
+          setTokenCredentials({ token: token, expiresIn: +expiresIn });
         }
       })
       .catch((e) => {
@@ -36,7 +37,7 @@ export const useLoadAuth = () => {
       .finally(() => {
         setIsAsyncStorageLoaded(true);
       });
-  }, [dispatch, isAsyncStorageLoaded]);
+  }, [setTokenCredentials, isAsyncStorageLoaded]);
 
   return [isAsyncStorageLoaded];
 };

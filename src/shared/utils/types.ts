@@ -5,3 +5,10 @@ export type CamelCase<S extends string> = S extends `${infer P1}_${infer P2}${in
 export type Mutable<T> = {
   -readonly [P in keyof T]: T[P];
 };
+
+export type AuthCredentialsType = {
+  token: string;
+  expiresIn: number;
+  setTokenCredentials: (payload: { token: string; expiresIn: number }) => void;
+  resetTokenCredentials: () => void;
+};

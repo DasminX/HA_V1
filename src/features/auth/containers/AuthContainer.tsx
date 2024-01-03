@@ -11,13 +11,12 @@ import {
 } from "../utils/enums";
 import { AuthValidatorFactory } from "../services/validator/ValidationServiceImpl";
 import { AuthServiceFactory } from "../services/api/AuthServiceImpl";
-import { resetToken, setToken } from "../slices/authSlice";
 import { AuthDialog } from "../components/atoms/AuthDialog";
 import { type FormValidityType } from "../utils/types";
-import { useAppDispatch, useAppSelector } from "../../../shared/hooks/redux-hooks";
-import { resetInputs } from "../slices/authInputValuesSlice";
 import { Button } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAuthFormStore } from "../slices/authFormInputsStore";
+import { useAuthStore } from "../../../shared/slices/authStore";
 
 const DEFAULT_IS_FORM_INVALID: FormValidityType = { bool: false, cause: "" };
 
@@ -26,11 +25,21 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFormInvalid, setIsFormInvalid] = useState<FormValidityType>(DEFAULT_IS_FORM_INVALID);
 
-  const dispatch = useAppDispatch();
-  const inputValues = useAppSelector((state) => state.authInputValues);
+  const { resetInputs, ...inputValues } = useAuthFormStore((state) => ({
+    resetInputs: state.resetInputValues,
+    email: state.email,
+    password: state.password,
+    repeatPassword: state.repeatPassword,
+    privacyPolicy: state.privacyPolicy,
+  }));
+
+  const authStore = useAuthStore((state) => ({
+    setToken: state.setTokenCredentials,
+    resetToken: state.resetTokenCredentials,
+  }));
 
   useEffect(() => {
-    dispatch(resetInputs());
+    resetInputs();
   }, [mode]);
 
   const handleSubmit = useCallback(async () => {
@@ -58,11 +67,11 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
         });
       }
 
-      dispatch(resetInputs());
+      resetInputs();
 
       switch (response.mode) {
         case AUTH_MODE_ENUM.LOGIN:
-          dispatch(setToken({ token: response.token, expiresIn: response.expiresIn }));
+          authStore.setToken({ token: response.token, expiresIn: response.expiresIn });
           router.replace("/dashboard/");
           break;
         case AUTH_MODE_ENUM.REGISTER:
@@ -94,7 +103,7 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
         />
         <Button
           onPress={async () => {
-            dispatch(resetToken());
+            authStore.resetToken();
             await AsyncStorage.clear();
           }}
         >

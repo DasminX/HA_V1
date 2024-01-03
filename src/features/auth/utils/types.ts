@@ -56,3 +56,11 @@ export type FirebaseAuthError = Readonly<{
   status: AUTH_RESPONSE_ENUM.ERROR;
   cause: string;
 }>;
+
+export type AuthFormCredentialsType = InputType & {
+  setEmail: (value: string) => void;
+  setPassword: (value: string) => void;
+  setRepeatPassword: (value: string) => void;
+  setPrivacyPolicy: (value: boolean) => void;
+  resetInputValues: () => void;
+};

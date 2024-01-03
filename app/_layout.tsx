@@ -2,11 +2,9 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
 import { SplashScreen } from "expo-router";
 import { useEffect } from "react";
-import { Provider as StoreProvider } from "react-redux";
 
 import { PaperProvider } from "react-native-paper";
 import { initializeI18N } from "../src/dict/initializer";
-import { rootStore } from "../src/store/rootStore";
 import RootNavigation from "../src/shared/containers/RootNavigation";
 import { StatusBar } from "expo-status-bar";
 
@@ -45,11 +43,9 @@ export default function RootLayout() {
 
   initializeI18N();
   return (
-    <StoreProvider store={rootStore}>
-      <PaperProvider>
-        <StatusBar style="light" />
-        <RootNavigation />
-      </PaperProvider>
-    </StoreProvider>
+    <PaperProvider>
+      <StatusBar style="light" />
+      <RootNavigation />
+    </PaperProvider>
   );
 }

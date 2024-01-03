@@ -1,13 +1,14 @@
 import { useTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
 import OutlinedInput from "../../../../shared/components/input/OutlinedInput";
-import { setEmail, setPassword } from "../../slices/authInputValuesSlice";
 import { memo } from "react";
+import { useAuthFormStore } from "../../slices/authFormInputsStore";
 
 export const CommonFormFields = memo(() => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
-
+  const { setEmail, setPassword } = useAuthFormStore((state) => ({
+    setEmail: state.setEmail,
+    setPassword: state.setPassword,
+  }));
   return (
     <>
       <OutlinedInput
@@ -15,12 +16,12 @@ export const CommonFormFields = memo(() => {
         keyboardType="email-address"
         placeholder="user@example.com"
         autoCapitalize="none"
-        onChangeText={(text) => dispatch(setEmail(text))}
+        onChangeText={(text) => setEmail(text)}
       />
       <OutlinedInput
         secureTextEntry={true}
         label={t("auth.password")}
-        onChangeText={(text) => dispatch(setPassword(text))}
+        onChangeText={(text) => setPassword(text)}
       />
     </>
   );
