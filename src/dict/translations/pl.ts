@@ -17,5 +17,6 @@ export default {
     passwordInvalid: "Hasło jest nieprawidłowe",
     repeatPasswordInvalid: "Hasła nie są takie same",
     privacyPolicyInvalid: "Polityka prywatności nie została zaakceptowana",
+    emailVerificationInvalid: "Email nie został zweryfikowany",
   },
 };

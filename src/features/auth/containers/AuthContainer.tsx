@@ -33,10 +33,10 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
 
   const setToken = useAuthStore((state) => state.setTokenCredentials);
   const resetToken = useAuthStore((state) => state.resetTokenCredentials);
-
+  /* 
   useEffect(() => {
     resetInputs();
-  }, [mode]);
+  }, [mode]); */
 
   const handleSubmit = useCallback(async () => {
     try {
@@ -59,6 +59,7 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
       const response = await AuthServiceFactory.getProperInstance(mode).authorize(email, password);
 
       if (response.status === AUTH_RESPONSE_ENUM.ERROR) {
+        console.log(response.cause);
         return setIsFormInvalid({
           bool: true,
           cause: response.cause,

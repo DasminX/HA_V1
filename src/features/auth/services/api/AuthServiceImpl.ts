@@ -32,8 +32,13 @@ export class AuthServiceLogin extends AuthServiceInstance {
     password: string,
   ): Promise<FirebaseLoginSuccess | FirebaseAuthError> {
     try {
-      const response = await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
-      const result = await response.user.getIdTokenResult();
+      const { user } = await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
+
+      if (!user.emailVerified) {
+        throw "EMAIL_VERIFICATION";
+      }
+
+      const result = await user.getIdTokenResult();
       const expiresInTimestamp = new Date(result.expirationTime).getTime();
 
       await AsyncStorage.multiSet([

@@ -17,5 +17,6 @@ export default {
     passwordInvalid: "Password is not valid",
     repeatPasswordInvalid: "Passwords are not the same",
     privacyPolicyInvalid: "Privacy policy is not accepted",
+    emailVerificationInvalid: "Email is not verified",
   },
 };
