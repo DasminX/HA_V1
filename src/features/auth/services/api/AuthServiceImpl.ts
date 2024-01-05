@@ -7,7 +7,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AUTH_MODE_ENUM } from "../../utils/enums";
 import { FIREBASE_AUTH } from "../../../../../firebaseConfig";
-import { AuthServiceInstance } from "./AuthService";
+import { AuthServiceAbstract } from "./AuthService";
 import { AUTH_TOKEN, AUTH_TOKEN_EXPIRESIN } from "../../../../shared/utils/async-storage-consts";
 import { toTimestamp } from "../../../../shared/utils/date-helpers";
 import { FirebaseAuthError } from "../../utils/types";
@@ -37,7 +37,7 @@ export class AuthServiceFactory {
   }
 }
 
-export class AuthServiceLogin extends AuthServiceInstance {
+export class AuthServiceLogin extends AuthServiceAbstract {
   public async authorize(
     email: string,
     password: string,
@@ -72,7 +72,7 @@ export class AuthServiceLogin extends AuthServiceInstance {
 
 // TODO ERRORY Z FIREBASE
 
-export class AuthServiceRegister extends AuthServiceInstance {
+export class AuthServiceRegister extends AuthServiceAbstract {
   public async authorize(
     email: string,
     password: string,
