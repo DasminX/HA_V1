@@ -10,6 +10,7 @@ import { FIREBASE_AUTH } from "../../../../../firebaseConfig";
 import { AuthServiceInstance } from "./AuthService";
 import { AUTH_TOKEN, AUTH_TOKEN_EXPIRESIN } from "../../../../shared/utils/async-storage-consts";
 import { toTimestamp } from "../../../../shared/utils/date-helpers";
+import { FirebaseAuthError } from "../../utils/types";
 
 type FirebaseLoginSuccess = Readonly<{
   mode: AUTH_MODE_ENUM.LOGIN;
@@ -23,11 +24,6 @@ type FirebaseRegisterSuccess = Readonly<{
   mode: AUTH_MODE_ENUM.REGISTER;
   status: AUTH_RESPONSE_ENUM.SUCCESS;
   message: "auth.successfulSignup";
-}>;
-
-type FirebaseAuthError = Readonly<{
-  status: AUTH_RESPONSE_ENUM.ERROR;
-  message: string;
 }>;
 
 export class AuthServiceFactory {
@@ -50,7 +46,7 @@ export class AuthServiceLogin extends AuthServiceInstance {
       const { user } = await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
 
       if (!user.emailVerified) {
-        throw "EMAIL_VERIFICATION";
+        throw AUTH_RESPONSE_ENUM.EMAIL_VERIFICATION_REQUIRED;
       }
 
       const result = await user.getIdTokenResult();
@@ -62,18 +58,14 @@ export class AuthServiceLogin extends AuthServiceInstance {
       ]);
 
       return {
-        status: AUTH_RESPONSE_ENUM.SUCCESS,
         mode: AUTH_MODE_ENUM.LOGIN,
+        status: AUTH_RESPONSE_ENUM.SUCCESS,
+        message: "auth.successfulSignin",
         token: result.token,
         expiresIn: expiresInTimestamp,
-        message: "auth.successfulSignin",
       } as FirebaseLoginSuccess;
     } catch (error) {
-      return {
-        status: AUTH_RESPONSE_ENUM.ERROR,
-        mode: AUTH_MODE_ENUM.LOGIN,
-        message: `${error}`,
-      } as FirebaseAuthError;
+      return this._sendError(error, AUTH_MODE_ENUM.LOGIN);
     }
   }
 }
@@ -91,16 +83,12 @@ export class AuthServiceRegister extends AuthServiceInstance {
       await sendEmailVerification(response.user);
 
       return {
-        status: AUTH_RESPONSE_ENUM.SUCCESS,
         mode: AUTH_MODE_ENUM.REGISTER,
+        status: AUTH_RESPONSE_ENUM.SUCCESS,
         message: "auth.successfulSignup",
       } as FirebaseRegisterSuccess;
     } catch (error) {
-      return {
-        status: AUTH_RESPONSE_ENUM.ERROR,
-        mode: AUTH_MODE_ENUM.REGISTER,
-        message: `${error}`,
-      } as FirebaseAuthError;
+      return this._sendError(error, AUTH_MODE_ENUM.REGISTER);
     }
   }
 }

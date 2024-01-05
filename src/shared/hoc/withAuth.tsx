@@ -9,7 +9,7 @@ export const withAuth = (BaseComponent: ElementType) => {
     const expiresIn = useAuthStore((state) => state.expiresIn);
     const resetTokenCredentials = useAuthStore((state) => state.resetTokenCredentials);
 
-    if (!validateAuth({ token: token, expiresIn: expiresIn })) {
+    if (!validateAuth(token, expiresIn)) {
       resetTokenCredentials();
       return <Redirect href={"/auth/login"} />;
     }

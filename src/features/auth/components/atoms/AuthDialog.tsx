@@ -9,6 +9,7 @@ type AuthDialogProps = Omit<
   "children"
 >;
 
+// todo obsluga dialog title
 export const AuthDialog = memo(({ visible, cause, onDismiss }: AuthDialogProps) => {
   const { t } = useTranslation();
 

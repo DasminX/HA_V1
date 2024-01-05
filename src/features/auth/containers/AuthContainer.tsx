@@ -34,16 +34,13 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
   const setToken = useAuthStore((state) => state.setTokenCredentials);
   const resetToken = useAuthStore((state) => state.resetTokenCredentials);
 
-  // todo
-  /*   useEffect(() => {
+  useEffect(() => {
     resetInputs();
-  }, [mode]); */
+  }, [mode]);
 
   const handleSubmit = useCallback(async () => {
     try {
       setIsSubmitting(true);
-
-      // todo simple refactor
       const validationResult = AuthValidatorFactory.initialize(mode).validateInputs({
         email,
         password,
@@ -108,11 +105,18 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
         />
         <Button
           onPress={async () => {
+            router.replace("/dashboard/");
+          }}
+        >
+          TEST idz do dashboard
+        </Button>
+        <Button
+          onPress={async () => {
             resetToken();
             await AsyncStorage.clear();
           }}
         >
-          RESET TOKENS TEST
+          TEST reset token
         </Button>
       </View>
     </KeyboardAvoidingView>

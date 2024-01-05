@@ -5,27 +5,27 @@ import {
   AuthFieldsValidatedSuccess,
 } from "../../utils/types";
 import { ValidationErrorGenerator } from "./ValidationErrorGeneratorImpl";
-import { BaseAuthValidator, type Validator } from "./ValidationService";
+import { AuthValidator } from "./ValidationService";
 
 export class AuthValidatorFactory {
-  static initialize(_mode: AUTH_MODE_ENUM): Validator {
+  static initialize(_mode: AUTH_MODE_ENUM): AuthValidator {
     switch (_mode) {
       case AUTH_MODE_ENUM.LOGIN:
         return new AuthValidatorLogin();
       case AUTH_MODE_ENUM.REGISTER:
         return new AuthValidatorRegister();
-      default:
-        throw new Error("Invalid authentication mode");
+      // default: // TODO
+      //   throw new Error("Invalid authentication mode");
     }
   }
 }
 
-class AuthValidatorLogin extends BaseAuthValidator {
-  protected _validateEmail(email: string) {
+class AuthValidatorLogin implements AuthValidator {
+  protected _validateEmail(email: InputType["email"]) {
     return new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, "gi").test(email);
   }
 
-  protected _validatePassword(password: string) {
+  protected _validatePassword(password: InputType["password"]) {
     return new RegExp(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/, "gi").test(
       password,
     );
@@ -44,11 +44,14 @@ class AuthValidatorLogin extends BaseAuthValidator {
 }
 
 class AuthValidatorRegister extends AuthValidatorLogin {
-  protected _arePasswordsSame(password: string, repeatPassword: string) {
+  protected _arePasswordsSame(
+    password: InputType["password"],
+    repeatPassword: InputType["repeatPassword"],
+  ) {
     return password === repeatPassword;
   }
 
-  protected _isPrivacyPolicy(privacyPolicy: boolean) {
+  protected _isPrivacyPolicy(privacyPolicy: InputType["privacyPolicy"]) {
     return !!privacyPolicy;
   }
 

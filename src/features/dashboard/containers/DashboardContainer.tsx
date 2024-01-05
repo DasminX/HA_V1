@@ -7,7 +7,7 @@ export const DashboardContainer = () => {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Text style={{ backgroundColor: "red" }}>DUPA</Text>
-      <Button onPress={() => router.replace("/auth/login")}>AAAAAAAAAA</Button>
+      <Button onPress={() => router.replace("/auth/login")}>wróc do auth</Button>
     </View>
   );
 };

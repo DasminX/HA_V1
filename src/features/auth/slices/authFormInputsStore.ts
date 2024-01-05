@@ -2,19 +2,19 @@ import { create } from "zustand";
 import { InputType } from "../utils/types";
 
 type AuthFormCredentialsType = InputType & {
-  setEmail: (value: string) => void;
-  setPassword: (value: string) => void;
-  setRepeatPassword: (value: string) => void;
-  setPrivacyPolicy: (value: boolean) => void;
+  setEmail: (value: InputType["email"]) => void;
+  setPassword: (value: InputType["password"]) => void;
+  setRepeatPassword: (value: InputType["repeatPassword"]) => void;
+  setPrivacyPolicy: (value: InputType["privacyPolicy"]) => void;
   resetInputValues: () => void;
 };
 
-const DEFAULT_AUTH_FORM_FIELDS: InputType = Object.freeze({
+const DEFAULT_AUTH_FORM_FIELDS: InputType = {
   email: "",
   password: "",
   repeatPassword: "",
   privacyPolicy: false,
-});
+};
 
 export const useAuthFormStore = create<AuthFormCredentialsType>((set) => ({
   ...DEFAULT_AUTH_FORM_FIELDS,

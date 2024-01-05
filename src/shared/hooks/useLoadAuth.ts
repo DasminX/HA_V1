@@ -3,12 +3,13 @@ import { useEffect, useState } from "react";
 import { AUTH_TOKEN, AUTH_TOKEN_EXPIRESIN } from "../utils/async-storage-consts";
 import { validateAuth } from "../utils/validate-auth";
 import { useAuthStore } from "../slices/authStore";
+import { KeyValuePair } from "@react-native-async-storage/async-storage/lib/typescript/types";
 
 const getAuthTokenProperties = async () => {
   const authTokenProperties = await AsyncStorage.multiGet([AUTH_TOKEN, AUTH_TOKEN_EXPIRESIN]);
   if (!authTokenProperties.length) return [];
 
-  const transformedATP = authTokenProperties.map((tuple) => ({
+  const transformedATP = authTokenProperties.map((tuple: KeyValuePair) => ({
     key: tuple[0],
     value: tuple[1],
   }));
@@ -25,7 +26,7 @@ export const useLoadAuth = () => {
   useEffect(() => {
     getAuthTokenProperties()
       .then(([token, expiresIn]) => {
-        if (token && expiresIn && validateAuth({ token, expiresIn: +expiresIn })) {
+        if (token && expiresIn && validateAuth(token, +expiresIn)) {
           setTokenCredentials({ token: token, expiresIn: +expiresIn });
         }
       })
