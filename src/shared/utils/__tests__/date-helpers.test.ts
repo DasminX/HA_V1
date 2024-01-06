@@ -14,8 +14,8 @@ describe("toTimestamp function", () => {
     const timestamp3 = toTimestamp(date3);
     const timestamp4 = toTimestamp(date4);
 
-    expect(timestamp).toBe(date.getTime());
-    expect(timestamp2).toBe(date2.getTime());
+    expect(timestamp).toBe(now);
+    expect(timestamp2).toBe(now);
     expect(now).toBeGreaterThan(timestamp3);
     expect(timestamp3).not.toBe(-1);
     expect(timestamp4).not.toBe(-1);
@@ -33,7 +33,7 @@ describe("toTimestamp function", () => {
     expect(timestamp).toEqual(-1);
   });
 
-  it("should return -1 if number if incoming date is greater than 90 days", () => {
+  it("should return -1 if incoming date is greater than 90 days", () => {
     const date = new Date("1 18 2038 23:59");
     const timestamp = toTimestamp(date);
     expect(timestamp).toEqual(-1);
