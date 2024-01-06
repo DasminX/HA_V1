@@ -9,6 +9,7 @@ import { AUTH_MODE_ENUM } from "../../utils/enums";
 import { RegisterFormFields } from "../molecules/RegisterFormFields";
 import { CommonFormFields } from "../molecules/CommonFormFields";
 import { COLORS } from "../../../../shared/utils/const-colors";
+import { ForgotPasswordLink } from "../atoms/ForgotPasswordLink";
 
 type AuthFormProps = {
   mode: AUTH_MODE_ENUM;
@@ -31,6 +32,7 @@ export const AuthForm = memo(({ mode, isSubmitting, handleSubmit }: AuthFormProp
         {t(`auth.${modeLowercaseText}`)}
       </VariantButton>
       <LabelChangeAuthMode mode={mode} />
+      {mode === AUTH_MODE_ENUM.LOGIN && <ForgotPasswordLink />}
     </View>
   );
 });
