@@ -17,7 +17,7 @@ export const AuthDialog = memo(({ visible, cause, onDismiss }: AuthDialogProps) 
     <Portal>
       <Dialog visible={visible} onDismiss={onDismiss}>
         <Dialog.Title style={{ textAlign: "center" }}>
-          {t(`auth.${camelCaseStr(cause.toLowerCase(), "_")}Invalid`)}
+          {t(`autha.${camelCaseStr(cause.toLowerCase(), "_")}Invalid`)}
         </Dialog.Title>
         <Dialog.Content>
           <Text variant="bodyMedium">{t("auth.enterValid")}</Text>
