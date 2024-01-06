@@ -4,7 +4,7 @@ import VariantButton from "../../../../shared/components/button/VariantButton";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "expo-router";
-import { AuthServiceFactory } from "../../services/api/AuthServiceImpl";
+// import { AuthServiceFactory } from "../../services/api/AuthServiceImpl";
 import OutlinedInput from "../../../../shared/components/input/OutlinedInput";
 
 export const AuthForgotPassword = () => {
