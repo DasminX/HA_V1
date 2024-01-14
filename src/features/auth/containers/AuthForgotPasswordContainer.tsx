@@ -3,15 +3,13 @@ import { useCallback, useEffect, useState } from "react";
 import { View, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
 
 import { AuthHeadline } from "../components/atoms/AuthHeadline";
-import { AuthForm } from "../components/organisms/AuthForm";
 import { AUTH_MODE_ENUM, AUTH_RESPONSE_ENUM, VALIDATION_STATUS_ENUM } from "../utils/enums";
-import { AuthValidatorFactory } from "../services/validator/ValidationServiceImpl";
 import { AuthServiceFactory } from "../services/api/AuthServiceImpl";
 import { AuthDialog } from "../components/atoms/AuthDialog";
-import { Button } from "react-native-paper";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuthFormStore } from "../slices/authFormInputsStore";
-import { useAuthStore } from "../../../shared/slices/authStore";
+import { AuthForgotPasswordForm } from "../components/organisms/AuthForgotPasswordForm";
+import { AuthValidatorFactory } from "../services/validator/ValidationServiceImpl";
+import { Button } from "react-native-paper";
 
 type FormValidityType = Readonly<{
   isInvalid: boolean;
@@ -20,10 +18,10 @@ type FormValidityType = Readonly<{
 
 const DEFAULT_IS_FORM_INVALID: FormValidityType = { isInvalid: false, cause: "" };
 
-export const AuthContainer = ({
+export const AuthForgotPasswordContainer = ({
   mode,
 }: {
-  mode: Exclude<AUTH_MODE_ENUM, "FORGOT_PASSWORD" | "CHANGE_FORGOTTEN_PASSWORD">;
+  mode: Exclude<AUTH_MODE_ENUM, "LOGIN" | "REGISTER">;
 }) => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -32,11 +30,7 @@ export const AuthContainer = ({
   const email = useAuthFormStore((state) => state.email);
   const password = useAuthFormStore((state) => state.password);
   const repeatPassword = useAuthFormStore((state) => state.repeatPassword);
-  const privacyPolicy = useAuthFormStore((state) => state.privacyPolicy);
   const resetInputs = useAuthFormStore((state) => state.resetInputValues);
-
-  const setToken = useAuthStore((state) => state.setTokenCredentials);
-  const resetToken = useAuthStore((state) => state.resetTokenCredentials);
 
   useEffect(() => {
     resetInputs();
@@ -45,11 +39,12 @@ export const AuthContainer = ({
   const handleSubmit = useCallback(async () => {
     try {
       setIsSubmitting(true);
+
       const validationResult = AuthValidatorFactory.initialize(mode)?.validateInputs({
-        email,
-        password,
-        repeatPassword,
-        privacyPolicy,
+        email: email,
+        password: password,
+        repeatPassword: repeatPassword,
+        privacyPolicy: false,
       });
 
       if (!validationResult || validationResult?.status === VALIDATION_STATUS_ENUM.ERROR) {
@@ -61,7 +56,7 @@ export const AuthContainer = ({
 
       const authService = AuthServiceFactory.getProperInstance(mode);
       if (authService == null) {
-        throw "errors.internalError";
+        throw "common.internalError";
       }
 
       const response = await authService.authorize(email, password);
@@ -74,15 +69,7 @@ export const AuthContainer = ({
 
       resetInputs();
 
-      switch (response.mode) {
-        case AUTH_MODE_ENUM.LOGIN:
-          setToken({ token: response.token, expiresIn: response.expiresIn });
-          router.replace("/dashboard/");
-          break;
-        case AUTH_MODE_ENUM.REGISTER:
-          router.replace("/auth/login");
-          break;
-      }
+      router.replace("/auth/login");
     } catch (e) {
       return setIsFormInvalid({
         isInvalid: true,
@@ -91,7 +78,7 @@ export const AuthContainer = ({
     } finally {
       setIsSubmitting(false);
     }
-  }, [mode, email, password, repeatPassword, privacyPolicy]);
+  }, [mode, email, password, repeatPassword]);
 
   // TODO ZROBIC ZAPOMNIALEM HASLO
   return (
@@ -99,29 +86,24 @@ export const AuthContainer = ({
       style={styles.root}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
+      <Button
+        onPress={() => (router.canGoBack() ? router.back() : router.replace("/auth/login"))}
+        style={{ position: "absolute", top: 0, left: 0 }}
+      >
+        &lt;=
+      </Button>
       <View>
         <AuthHeadline mode={mode} />
-        <AuthForm mode={mode} isSubmitting={isSubmitting} handleSubmit={handleSubmit} />
+        <AuthForgotPasswordForm
+          mode={mode}
+          isSubmitting={isSubmitting}
+          handleSubmit={handleSubmit}
+        />
         <AuthDialog
           visible={isFormInvalid.isInvalid}
           onDismiss={useCallback(() => setIsFormInvalid(DEFAULT_IS_FORM_INVALID), [])}
           cause={isFormInvalid.cause}
         />
-        <Button
-          onPress={async () => {
-            router.replace("/dashboard/");
-          }}
-        >
-          TEST idz do dashboard
-        </Button>
-        <Button
-          onPress={async () => {
-            resetToken();
-            await AsyncStorage.clear();
-          }}
-        >
-          TEST reset token
-        </Button>
       </View>
     </KeyboardAvoidingView>
   );

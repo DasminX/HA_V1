@@ -5,7 +5,7 @@ export abstract class AuthServiceAbstract {
   public abstract authorize(_: string, __: string): Promise<unknown>;
 
   protected _sendError(error: unknown, mode: keyof typeof AUTH_MODE_ENUM): FirebaseAuthError {
-    let errorMsg = "auth.unknownError";
+    let errorMsg = "common.unknownError";
     if (typeof error === "string") {
       errorMsg = error;
     }

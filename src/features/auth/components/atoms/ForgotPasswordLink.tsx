@@ -9,7 +9,11 @@ export const ForgotPasswordLink = () => {
     <Text variant="labelLarge">
       {t("auth.forgotPassword")}{" "}
       <Text variant="bodyLarge">
-        <Link style={{ color: COLORS.variants.blue }} href={"/auth/forgot-password"}>
+        <Link
+          replace={false}
+          style={{ color: COLORS.variants.blue }}
+          href={"/auth/forgot-password"}
+        >
           {t(`auth.remindPassword`)}
         </Link>
       </Text>
