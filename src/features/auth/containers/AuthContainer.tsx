@@ -20,11 +20,7 @@ type FormValidityType = Readonly<{
 
 const DEFAULT_IS_FORM_INVALID: FormValidityType = { isInvalid: false, cause: "" };
 
-export const AuthContainer = ({
-  mode,
-}: {
-  mode: Exclude<AUTH_MODE_ENUM, "FORGOT_PASSWORD" | "CHANGE_FORGOTTEN_PASSWORD">;
-}) => {
+export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFormInvalid, setIsFormInvalid] = useState<FormValidityType>(DEFAULT_IS_FORM_INVALID);
@@ -52,7 +48,8 @@ export const AuthContainer = ({
         privacyPolicy,
       });
 
-      if (!validationResult || validationResult?.status === VALIDATION_STATUS_ENUM.ERROR) {
+      if (!validationResult || validationResult.status === VALIDATION_STATUS_ENUM.ERROR) {
+        console.log(validationResult);
         return setIsFormInvalid({
           isInvalid: true,
           cause: validationResult?.cause ?? "common.unknownError",
@@ -76,10 +73,19 @@ export const AuthContainer = ({
 
       switch (response.mode) {
         case AUTH_MODE_ENUM.LOGIN:
-          setToken({ token: response.token, expiresIn: response.expiresIn });
+          if (
+            "token" in response &&
+            typeof response.token === "string" &&
+            "expiresIn" in response &&
+            typeof response.expiresIn === "number"
+          ) {
+            setToken({ token: response.token, expiresIn: response.expiresIn });
+          }
           router.replace("/dashboard/");
           break;
         case AUTH_MODE_ENUM.REGISTER:
+        case AUTH_MODE_ENUM.FORGOT_PASSWORD:
+        case AUTH_MODE_ENUM.CHANGE_FORGOTTEN_PASSWORD:
           router.replace("/auth/login");
           break;
       }
@@ -93,7 +99,6 @@ export const AuthContainer = ({
     }
   }, [mode, email, password, repeatPassword, privacyPolicy]);
 
-  // TODO ZROBIC ZAPOMNIALEM HASLO
   return (
     <KeyboardAvoidingView
       style={styles.root}
@@ -113,6 +118,13 @@ export const AuthContainer = ({
           }}
         >
           TEST idz do dashboard
+        </Button>
+        <Button
+          onPress={async () => {
+            router.replace("/auth/change-forgotten-password");
+          }}
+        >
+          TEST idz do change forgotten password
         </Button>
         <Button
           onPress={async () => {

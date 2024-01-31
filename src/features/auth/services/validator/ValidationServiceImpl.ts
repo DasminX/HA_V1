@@ -3,7 +3,7 @@ import {
   AuthFieldsValidatedSuccess,
   InputType,
 } from "./../../utils/types";
-import { AUTH_MODE_ENUM, INPUT_VALUES_ENUM, VALIDATION_STATUS_ENUM } from "../../utils/enums";
+import { AUTH_MODE_ENUM, VALIDATION_STATUS_ENUM } from "../../utils/enums";
 import { FormValidator } from "./ValidationService";
 
 export class AuthValidatorFactory {
@@ -38,7 +38,7 @@ export class FormValidatorLogin extends FormValidator {
     } catch (e) {
       return {
         status: VALIDATION_STATUS_ENUM.ERROR,
-        cause: e as keyof typeof INPUT_VALUES_ENUM,
+        cause: e,
       } as AuthFieldsValidatedError;
     }
   }
@@ -68,7 +68,7 @@ export class FormValidatorRegister extends FormValidator {
     } catch (e) {
       return {
         status: VALIDATION_STATUS_ENUM.ERROR,
-        cause: e as keyof typeof INPUT_VALUES_ENUM,
+        cause: e,
       } as AuthFieldsValidatedError;
     }
   }
@@ -85,7 +85,7 @@ export class FormValidatorForgotPassword extends FormValidator {
     } catch (e) {
       return {
         status: VALIDATION_STATUS_ENUM.ERROR,
-        cause: e as keyof typeof INPUT_VALUES_ENUM,
+        cause: e,
       } as AuthFieldsValidatedError;
     }
   }
@@ -109,7 +109,7 @@ export class FormValidatorChangeForgottenPassword extends FormValidator {
     } catch (e) {
       return {
         status: VALIDATION_STATUS_ENUM.ERROR,
-        cause: e as keyof typeof INPUT_VALUES_ENUM,
+        cause: e,
       } as AuthFieldsValidatedError;
     }
   }

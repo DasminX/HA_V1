@@ -38,5 +38,5 @@ export const useLoadAuth = () => {
       });
   }, [setTokenCredentials, isAsyncStorageLoaded]);
 
-  return [isAsyncStorageLoaded];
+  return isAsyncStorageLoaded;
 };

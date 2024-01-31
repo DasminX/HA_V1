@@ -6,10 +6,12 @@ import { useTranslation } from "react-i18next";
 import VariantButton from "../../../../shared/components/button/VariantButton";
 import { LabelChangeAuthMode } from "../atoms/LabelChangeAuthMode";
 import { AUTH_MODE_ENUM } from "../../utils/enums";
-import { RegisterFormFields } from "../molecules/RegisterFormFields";
-import { CommonFormFields } from "../molecules/CommonFormFields";
 import { COLORS } from "../../../../shared/utils/const-colors";
 import { ForgotPasswordLink } from "../atoms/ForgotPasswordLink";
+import { EmailFormField } from "../molecules/EmailFormField";
+import { PasswordFormField } from "../molecules/PasswordFormField";
+import { RepeatPasswordFormField } from "../molecules/RepeatPasswordFormField";
+import { PrivacyPolicyFormField } from "../molecules/PrivacyPolicyFormField";
 
 type AuthFormProps = {
   mode: AUTH_MODE_ENUM;
@@ -26,12 +28,17 @@ export const AuthForm = memo(({ mode, isSubmitting, handleSubmit }: AuthFormProp
   return (
     <View style={styles.form}>
       <Text variant="titleLarge">{t(`auth.${modeLowercaseText}`)}</Text>
-      <CommonFormFields />
-      {mode === AUTH_MODE_ENUM.REGISTER && <RegisterFormFields />}
+      {mode !== AUTH_MODE_ENUM.CHANGE_FORGOTTEN_PASSWORD && <EmailFormField />}
+      {mode !== AUTH_MODE_ENUM.FORGOT_PASSWORD && <PasswordFormField />}
+      {mode !== AUTH_MODE_ENUM.LOGIN && mode !== AUTH_MODE_ENUM.FORGOT_PASSWORD && (
+        <RepeatPasswordFormField />
+      )}
+      {mode === AUTH_MODE_ENUM.REGISTER && <PrivacyPolicyFormField />}
       <VariantButton onPress={handleSubmit} loading={isSubmitting} disabled={isSubmitting}>
         {t(`auth.${modeLowercaseText}`)}
       </VariantButton>
-      <LabelChangeAuthMode mode={mode} />
+      {mode !== AUTH_MODE_ENUM.FORGOT_PASSWORD &&
+        mode !== AUTH_MODE_ENUM.CHANGE_FORGOTTEN_PASSWORD && <LabelChangeAuthMode mode={mode} />}
       {mode === AUTH_MODE_ENUM.LOGIN && <ForgotPasswordLink />}
     </View>
   );

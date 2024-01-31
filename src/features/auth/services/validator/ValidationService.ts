@@ -5,7 +5,7 @@ export abstract class FormValidator {
   protected _validateEmailOrThrow(email: string) {
     const result = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, "gi").test(email);
     if (!result) {
-      throw new Error(INPUT_VALUES_ENUM.EMAIL);
+      throw INPUT_VALUES_ENUM.EMAIL;
     }
     return true;
   }
@@ -16,7 +16,7 @@ export abstract class FormValidator {
       "gi",
     ).test(password);
     if (!result) {
-      throw new Error(INPUT_VALUES_ENUM.PASSWORD);
+      throw INPUT_VALUES_ENUM.PASSWORD;
     }
     return true;
   }
@@ -25,15 +25,15 @@ export abstract class FormValidator {
     password: InputType["password"],
     repeatPassword: InputType["repeatPassword"],
   ) {
-    if (password === repeatPassword) {
-      throw new Error(INPUT_VALUES_ENUM.REPEAT_PASSWORD);
+    if (password !== repeatPassword) {
+      throw INPUT_VALUES_ENUM.REPEAT_PASSWORD;
     }
     return true;
   }
 
   protected _isPrivacyPolicyOrThrow(privacyPolicy: InputType["privacyPolicy"]) {
     if (!!privacyPolicy === false) {
-      throw new Error(INPUT_VALUES_ENUM.PRIVACY_POLICY);
+      throw INPUT_VALUES_ENUM.PRIVACY_POLICY;
     }
     return true;
   }

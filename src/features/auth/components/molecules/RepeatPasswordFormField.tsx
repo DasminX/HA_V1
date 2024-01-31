@@ -3,18 +3,16 @@ import OutlinedInput from "../../../../shared/components/input/OutlinedInput";
 import { memo } from "react";
 import { useAuthFormStore } from "../../slices/authFormInputsStore";
 
-export const ForgotPasswordFields = memo(() => {
+export const RepeatPasswordFormField = memo(() => {
   const { t } = useTranslation();
 
-  const setEmail = useAuthFormStore((state) => state.setEmail);
+  const setRepeatPassword = useAuthFormStore((state) => state.setRepeatPassword);
 
   return (
     <OutlinedInput
-      label={t("auth.email")}
-      keyboardType="email-address"
-      placeholder="user@example.com"
-      autoCapitalize="none"
-      onChangeText={(text) => setEmail(text)}
+      secureTextEntry={true}
+      label={t("auth.repeatPassword")}
+      onChangeText={(text) => setRepeatPassword(text)}
     />
   );
 });
