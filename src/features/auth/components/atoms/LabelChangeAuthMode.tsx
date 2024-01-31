@@ -5,9 +5,15 @@ import { capitalizeStr } from "../../../../shared/utils/string-transformators";
 import { COLORS } from "../../../../shared/utils/const-colors";
 import { AUTH_MODE_ENUM } from "../../utils/enums";
 
-type AuthPathType = Readonly<Lowercase<keyof typeof AUTH_MODE_ENUM>>;
+type AuthPathType = Readonly<
+  Lowercase<Exclude<AUTH_MODE_ENUM, "FORGOT_PASSWORD" | "CHANGE_FORGOTTEN_PASSWORD">>
+>;
 
-export const LabelChangeAuthMode = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
+export const LabelChangeAuthMode = ({
+  mode,
+}: {
+  mode: Exclude<AUTH_MODE_ENUM, "FORGOT_PASSWORD" | "CHANGE_FORGOTTEN_PASSWORD">;
+}) => {
   const { t } = useTranslation();
 
   const oppositePath = (
