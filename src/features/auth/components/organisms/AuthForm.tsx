@@ -12,6 +12,7 @@ import { EmailFormField } from "../molecules/EmailFormField";
 import { PasswordFormField } from "../molecules/PasswordFormField";
 import { RepeatPasswordFormField } from "../molecules/RepeatPasswordFormField";
 import { PrivacyPolicyFormField } from "../molecules/PrivacyPolicyFormField";
+import { camelCaseStr } from "../../../../shared/utils/string-transformators";
 
 type AuthFormProps = {
   mode: AUTH_MODE_ENUM;
@@ -22,7 +23,10 @@ type AuthFormProps = {
 export const AuthForm = memo(({ mode, isSubmitting, handleSubmit }: AuthFormProps) => {
   const { t } = useTranslation();
 
-  const modeLowercaseText = mode.toLowerCase();
+  const modeLowercaseText = camelCaseStr(mode.toLowerCase(), "_");
+
+  const buttonText =
+    mode === AUTH_MODE_ENUM.FORGOT_PASSWORD ? "common.send" : `auth.${modeLowercaseText}`;
 
   // TODO SNACKBAR
   return (
@@ -35,7 +39,7 @@ export const AuthForm = memo(({ mode, isSubmitting, handleSubmit }: AuthFormProp
       )}
       {mode === AUTH_MODE_ENUM.REGISTER && <PrivacyPolicyFormField />}
       <VariantButton onPress={handleSubmit} loading={isSubmitting} disabled={isSubmitting}>
-        {t(`auth.${modeLowercaseText}`)}
+        {t(buttonText)}
       </VariantButton>
       {mode !== AUTH_MODE_ENUM.FORGOT_PASSWORD &&
         mode !== AUTH_MODE_ENUM.CHANGE_FORGOTTEN_PASSWORD && <LabelChangeAuthMode mode={mode} />}

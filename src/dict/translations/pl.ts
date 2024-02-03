@@ -1,4 +1,7 @@
 export default {
+  errors: {
+    unknown: "Nieznany błąd",
+  },
   auth: {
     welcomeTo: "Witaj w ",
     loginTo: "Zaloguj się na ",
@@ -8,7 +11,6 @@ export default {
     privacyPolicy: "Akceptuje politykę prywatności",
     isNotValid: " jest niepoprawne!",
     enterValid: "Proszę wprowadzić poprawną wartość.",
-    close: "Zamknij",
     notHavingAccount: "Jeszcze nie posiadasz konta?",
     havingAccount: "Posiadasz już konto?",
     login: "Zaloguj się",
@@ -18,5 +20,13 @@ export default {
     repeatPasswordInvalid: "Hasła nie są takie same",
     privacyPolicyInvalid: "Polityka prywatności nie została zaakceptowana",
     emailVerificationInvalid: "Email nie został zweryfikowany",
+    remindPassword: "Przypomnij hasło",
+    changeForgottenPassword: "Zmień hasło",
+    forgotPassword: "Nie pamiętasz hasła?",
+  },
+  common: {
+    close: "Zamknij",
+    clickHere: "Kliknij tutaj",
+    send: "Wyślij",
   },
 };

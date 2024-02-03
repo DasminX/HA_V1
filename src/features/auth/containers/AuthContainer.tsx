@@ -12,6 +12,7 @@ import { Button } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuthFormStore } from "../slices/authFormInputsStore";
 import { useAuthStore } from "../../../shared/slices/authStore";
+import { camelCaseStr } from "../../../shared/utils/string-transformators";
 
 type FormValidityType = Readonly<{
   isInvalid: boolean;
@@ -41,33 +42,27 @@ export const AuthContainer = ({ mode }: { mode: AUTH_MODE_ENUM }) => {
   const handleSubmit = useCallback(async () => {
     try {
       setIsSubmitting(true);
-      const validationResult = AuthValidatorFactory.initialize(mode)?.validateInputs({
+
+      const validator = AuthValidatorFactory.initialize(mode);
+      if (!validator) throw "errors.unknown";
+
+      const validationResult = validator.validateInputs({
         email,
         password,
         repeatPassword,
         privacyPolicy,
       });
 
-      if (!validationResult || validationResult.status === VALIDATION_STATUS_ENUM.ERROR) {
-        console.log(validationResult);
-        return setIsFormInvalid({
-          isInvalid: true,
-          cause: validationResult?.cause ?? "common.unknownError",
-        });
+      if (validationResult.status === VALIDATION_STATUS_ENUM.ERROR) {
+        const validationErrorCause = `auth.${camelCaseStr(validationResult.cause, "_")}Invalid`;
+        throw validationErrorCause;
       }
 
       const authService = AuthServiceFactory.getProperInstance(mode);
-      if (authService == null) {
-        throw "errors.internalError";
-      }
+      if (authService == null) throw "errors.unknown";
 
       const response = await authService.authorize(email, password);
-      if (response.status === AUTH_RESPONSE_ENUM.ERROR) {
-        return setIsFormInvalid({
-          isInvalid: true,
-          cause: response.message,
-        });
-      }
+      if (response.status === AUTH_RESPONSE_ENUM.ERROR) throw response.message;
 
       resetInputs();
 

@@ -17,6 +17,8 @@ export class AuthValidatorFactory {
         return new FormValidatorForgotPassword();
       case AUTH_MODE_ENUM.CHANGE_FORGOTTEN_PASSWORD:
         return new FormValidatorChangeForgottenPassword();
+      default:
+        return false;
     }
   }
 }

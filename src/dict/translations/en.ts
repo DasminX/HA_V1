@@ -1,4 +1,7 @@
 export default {
+  errors: {
+    unknown: "Unknown error",
+  },
   auth: {
     welcomeTo: "Welcome to ",
     loginTo: "Log in to ",
@@ -8,7 +11,6 @@ export default {
     privacyPolicy: "I accept privacy policy",
     isNotValid: " is not valid!",
     enterValid: "Enter a valid value please",
-    close: "Close",
     notHavingAccount: "Haven't got an account yet?",
     havingAccount: "Do you already have an account?",
     login: "Log in",
@@ -18,5 +20,13 @@ export default {
     repeatPasswordInvalid: "Passwords are not the same",
     privacyPolicyInvalid: "Privacy policy is not accepted",
     emailVerificationInvalid: "Email is not verified",
+    remindPassword: "Remind password",
+    changeForgottenPassword: "Change password",
+    forgotPassword: "Forgot password?",
+  },
+  common: {
+    close: "Close",
+    clickHere: "Click here",
+    send: "Send",
   },
 };

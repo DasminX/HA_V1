@@ -14,7 +14,7 @@ export const ForgotPasswordLink = () => {
           style={{ color: COLORS.variants.blue }}
           href={"/auth/forgot-password"}
         >
-          {t(`auth.remindPassword`)}
+          {t(`common.clickHere`)}
         </Link>
       </Text>
     </Text>
